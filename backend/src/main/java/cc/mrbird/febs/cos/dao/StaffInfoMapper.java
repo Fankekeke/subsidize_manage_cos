@@ -15,33 +15,48 @@ import java.util.List;
 public interface StaffInfoMapper extends BaseMapper<StaffInfo> {
 
     /**
-     * 分页获取员工信息
+     * 分页获取导师信息
      *
      * @param page          分页对象
-     * @param staffInfo 员工信息
+     * @param staffInfo 导师信息
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> selectStaffPage(Page<StaffInfo> page, @Param("staffInfo") StaffInfo staffInfo);
 
     /**
-     * 查询员工信息
+     * 查询导师课表信息
      *
-     * @param enterpriseId 其他检查机构id
+     * @param staffId 导师ID
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> queryScheduleByStaffId1(@Param("staffId") Integer staffId);
+
+    /**
+     * 查询导师课表信息
+     *
+     * @param staffId 导师ID
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> queryScheduleByStaffId2(@Param("staffId") Integer staffId);
+    /**
+     * 查询导师信息
+     *
+     * @param enterpriseId 校企id
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> selectStaffList(@Param("enterpriseId") Integer enterpriseId);
 
 
     /**
-     * 查询员工信息
+     * 查询导师信息
      *
-     * @param enterpriseId 其他检查机构id
+     * @param enterpriseId 校企id
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> selectStaffListUser(@Param("enterpriseId") Integer enterpriseId, @Param("staffId") Integer staffId);
 
     /**
-     * 查询员工信息
+     * 查询导师信息
      *
      * @param ids ids
      * @return 结果

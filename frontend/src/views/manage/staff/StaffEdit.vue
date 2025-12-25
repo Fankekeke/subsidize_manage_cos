@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="修改员工" @cancel="onClose" :width="800">
+  <a-modal v-model="show" title="修改导师" @cancel="onClose" :width="800">
     <template slot="footer">
       <a-button key="back" @click="onClose">
         取消
@@ -11,7 +11,7 @@
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
         <a-col :span="12">
-          <a-form-item label='员工姓名' v-bind="formItemLayout">
+          <a-form-item label='导师姓名' v-bind="formItemLayout">
             <a-input v-decorator="[
             'name',
             { rules: [{ required: true, message: '请输入名称!' }] }
@@ -19,10 +19,10 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label='员工性别' v-bind="formItemLayout">
+          <a-form-item label='导师性别' v-bind="formItemLayout">
             <a-select v-decorator="[
               'sex',
-              { rules: [{ required: true, message: '请输入员工性别!' }] }
+              { rules: [{ required: true, message: '请输入导师性别!' }] }
               ]">
               <a-select-option value="1">男</a-select-option>
               <a-select-option value="2">女</a-select-option>
@@ -80,7 +80,7 @@
         <a-col :span="12">
           <a-form-item label='邮 箱' v-bind="formItemLayout">
             <a-input v-decorator="[
-            'mail'
+            'email'
             ]"/>
           </a-form-item>
         </a-col>
@@ -108,6 +108,26 @@
               { rules: [{ required: true, message: '请输入所属岗位!' }] }
               ]">
               <a-select-option :value="item.id" v-for="(item, index) in positionList" :key="index">{{ item.name }}</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :md="6" :sm="24">
+          <a-form-item label='所属系' v-bind="formItemLayout">
+            <a-select style="width: 100%" v-decorator="[
+            'tieId',
+            { rules: [{ required: true, message: '请输入所属系!' }] }
+            ]">
+              <a-select-option :value="item.id" v-for="(item, index) in tieList" :key="index">{{ item.name }}</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :md="6" :sm="24">
+          <a-form-item label='所属专业' v-bind="formItemLayout">
+            <a-select style="width: 100%" v-decorator="[
+            'majorId',
+            { rules: [{ required: true, message: '请输入所属专业!' }] }
+            ]">
+              <a-select-option :value="item.id" v-for="(item, index) in majorList" :key="index">{{ item.name }}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
@@ -184,14 +204,28 @@ export default {
       previewVisible: false,
       previewImage: '',
       deptList: [],
+      tieList: [],
+      majorList: [],
       positionList: []
     }
   },
   mounted () {
     this.selectDeptList()
     this.selectPositionList()
+    this.getTieList()
+    this.getMajorList()
   },
   methods: {
+    getTieList () {
+      this.$get('/cos/tie-info/list').then((r) => {
+        this.tieList = r.data.data
+      })
+    },
+    getMajorList () {
+      this.$get('/cos/major-info/list').then((r) => {
+        this.majorList = r.data.data
+      })
+    },
     selectDeptList () {
       this.$get(`/cos/dept-info/list`).then((r) => {
         this.deptList = r.data.data
@@ -241,7 +275,7 @@ export default {
     },
     setFormValues ({...staff}) {
       this.rowId = staff.id
-      let fields = ['name', 'sex', 'birthday', 'nativeAddress', 'idCard', 'diploma', 'schoolName', 'address', 'mail', 'phone', 'deptId', 'positionId']
+      let fields = ['name', 'sex', 'birthday', 'nativeAddress', 'idCard', 'diploma', 'schoolName', 'address', 'email', 'phone', 'deptId', 'positionId', 'tieId', 'majorId']
       let obj = {}
       Object.keys(staff).forEach((key) => {
         if (key === 'sex') {

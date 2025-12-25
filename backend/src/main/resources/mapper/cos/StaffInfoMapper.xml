@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.StaffInfoMapper">
 
-    <!-- 分页获取员工信息 -->
+    <!-- 分页获取导师信息 -->
     <select id="selectStaffPage" resultType="java.util.LinkedHashMap">
         select
         si.id,
@@ -16,23 +16,26 @@
         si.diploma,
         si.school_name,
         si.address,
-        si.mail,
+        si.email,
         si.phone,
         si.create_date,
         si.del_flag,
         si.dept_id,
         si.position_id,
+        si.tie_id,
+        si.major_id,
         di.dept_name,
         poi.name as positionName,
-        ei.name as enterpriseName
+        ti.name as tieName,
+        mi.name as majorName
         from
         staff_info si
         left join dept_info di on
         (di.id = si.dept_id)
         left join position_info poi on
         (poi.id = si.position_id)
-        left join enterprise_info ei on
-        (ei.id = si.enterprise_id)
+        left join tie_info ti on (ti.id = si.tie_id)
+        left join major_info mi on (mi.id = si.major_id)
         where
         1 = 1
         and si.del_flag = '0'
@@ -45,17 +48,84 @@
         <if test="staffInfo.deptId != null and staffInfo.deptId != ''">
             AND si.dept_id = #{staffInfo.deptId}
         </if>
+        <if test="staffInfo.staffId != null and staffInfo.staffId != ''">
+            AND si.user_id = #{staffInfo.staffId}
+        </if>
         <if test="staffInfo.positionId != null and staffInfo.positionId != ''">
             AND si.position_id = #{staffInfo.positionId}
-        </if>
-        <if test="staffInfo.enterpriseId != null and staffInfo.enterpriseId != ''">
-            AND ei.user_id = #{staffInfo.enterpriseId}
         </if>
         order by
         si.create_date desc
     </select>
 
-    <!-- 查询员工信息 -->
+    <!-- 查询导师课表信息 -->
+    <select id="queryScheduleByStaffId1" resultType="java.util.LinkedHashMap">
+        select
+        sci.id,
+        sci.course_date,
+        sci.start_time,
+        sci.end_time,
+        sci.class_id,
+        sci.course_id,
+        cai.name as className,
+        ci.name as courseName,
+        ci.address,
+        si.name as staffName,
+        si.images as staffImages,
+        ti.name as tieName,
+        mi.name as majorName
+        from
+        schedule_class_info sci
+        left join class_info cai on (cai.id = sci.class_id)
+        left join course_info ci on
+        (ci.id = sci.course_id)
+        left join staff_info si on
+        (si.id = ci.staff_id)
+        left join tie_info ti on
+        (ti.id = ci.tie_id)
+        left join major_info mi on
+        (mi.id = ci.major_id)
+        where 1 = 1
+        <if test="staffId != null and staffId != ''">
+            AND si.user_id = #{staffId}
+        </if>
+        order by sci.course_date desc
+    </select>
+
+    <!-- 查询导师课表信息 -->
+    <select id="queryScheduleByStaffId2" resultType="java.util.LinkedHashMap">
+        select
+        sei.id,
+        sei.course_date,
+        sei.start_time,
+        sei.end_time,
+        sei.course_id,
+        sei.content,
+        sei.create_date,
+        ci.name as courseName,
+        ci.address,
+        si.name as staffName,
+        si.images as staffImages,
+        ti.name as tieName,
+        mi.name as majorName
+        from
+        schedule_elective_info sei
+        left join course_info ci on
+        (ci.id = sei.course_id)
+        left join staff_info si on
+        (si.id = ci.staff_id)
+        left join tie_info ti on
+        (ti.id = ci.tie_id)
+        left join major_info mi on
+        (mi.id = ci.major_id)
+        where 1 = 1
+        <if test="staffId != null and staffId != ''">
+            AND si.user_id = #{staffId}
+        </if>
+        order by sei.create_date desc
+    </select>
+
+    <!-- 查询导师信息 -->
     <select id="selectStaffList" resultType="java.util.LinkedHashMap">
         select
         si.id,
@@ -69,34 +139,28 @@
         si.diploma,
         si.school_name,
         si.address,
-        si.mail,
+        si.email,
         si.phone,
         si.create_date,
         si.del_flag,
         si.dept_id,
         si.position_id,
         di.dept_name,
-        poi.name as positionName,
-        ei.name as enterpriseName
+        poi.name as positionName
         from
         staff_info si
         left join dept_info di on
         (di.id = si.dept_id)
         left join position_info poi on
         (poi.id = si.position_id)
-        left join enterprise_info ei on
-        (ei.id = si.enterprise_id)
         where
         1 = 1
         and si.del_flag = '0'
-        <if test="enterpriseId != null">
-            AND ei.user_id = #{enterpriseId}
-        </if>
         order by
         si.create_date desc
     </select>
 
-    <!-- 查询员工信息 -->
+    <!-- 查询导师信息 -->
     <select id="selectStaffListUser" resultType="java.util.LinkedHashMap">
         select
         si.id,
@@ -110,35 +174,29 @@
         si.diploma,
         si.school_name,
         si.address,
-        si.mail,
+        si.email,
         si.phone,
         si.create_date,
         si.del_flag,
         si.dept_id,
         si.position_id,
         di.dept_name,
-        poi.name as positionName,
-        ei.name as enterpriseName
+        poi.name as positionName
         from
         staff_info si
         left join dept_info di on
         (di.id = si.dept_id)
         left join position_info poi on
         (poi.id = si.position_id)
-        left join enterprise_info ei on
-        (ei.id = si.enterprise_id)
         where
         1 = 1
         and si.del_flag = '0'
         and si.id != #{staffId}
-        <if test="enterpriseId != null">
-            AND ei.id = #{enterpriseId}
-        </if>
         order by
         si.create_date desc
     </select>
 
-    <!-- 查询员工信息 -->
+    <!-- 查询导师信息 -->
     <select id="selectStaffListByUserIds" resultType="java.util.LinkedHashMap">
         select
         si.id,
@@ -152,23 +210,20 @@
         si.diploma,
         si.school_name,
         si.address,
-        si.mail,
+        si.email,
         si.phone,
         si.create_date,
         si.del_flag,
         si.dept_id,
         si.position_id,
         di.dept_name,
-        poi.name as positionName,
-        ei.name as enterpriseName
+        poi.name as positionName
         from
         staff_info si
         left join dept_info di on
         (di.id = si.dept_id)
         left join position_info poi on
         (poi.id = si.position_id)
-        left join enterprise_info ei on
-        (ei.id = si.enterprise_id)
         where
         1 = 1
         and si.del_flag = '0'

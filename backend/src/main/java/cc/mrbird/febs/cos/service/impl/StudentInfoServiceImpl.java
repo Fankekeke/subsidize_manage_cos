@@ -1,8 +1,6 @@
 package cc.mrbird.febs.cos.service.impl;
 
 import cc.mrbird.febs.cos.entity.BulletinInfo;
-import cc.mrbird.febs.cos.entity.ScheduleTemplateInfo;
-import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.entity.StudentInfo;
 import cc.mrbird.febs.cos.dao.StudentInfoMapper;
 import cc.mrbird.febs.cos.service.IBulletinInfoService;

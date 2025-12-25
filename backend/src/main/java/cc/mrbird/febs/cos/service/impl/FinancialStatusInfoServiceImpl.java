@@ -1,7 +1,7 @@
 package cc.mrbird.febs.cos.service.impl;
 
+import cc.mrbird.febs.cos.dao.FinancialStatusInfoMapper;
 import cc.mrbird.febs.cos.entity.FinancialStatusInfo;
-import cc.mrbird.febs.cos.mapper.FinancialStatusInfoMapper;
 import cc.mrbird.febs.cos.service.IFinancialStatusInfoService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

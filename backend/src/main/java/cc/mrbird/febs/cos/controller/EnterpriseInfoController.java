@@ -135,7 +135,6 @@ public class EnterpriseInfoController {
     @PostMapping
     public R save(EnterpriseInfo enterpriseInfo) throws Exception {
         enterpriseInfo.setCode("ERP-" + System.currentTimeMillis());
-        userService.registEnterprise(enterpriseInfo.getCode(), "1234qwer", enterpriseInfo);
         return R.ok(true);
     }
 

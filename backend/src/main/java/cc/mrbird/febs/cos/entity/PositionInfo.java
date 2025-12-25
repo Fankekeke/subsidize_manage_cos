@@ -51,7 +51,7 @@ public class PositionInfo implements Serializable {
     private String createBy;
 
     /**
-     * 所属其他检查机构
+     * 所属校企
      */
     private Integer enterpriseId;
 

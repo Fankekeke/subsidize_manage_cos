@@ -1,6 +1,5 @@
 package cc.mrbird.febs.cos.dao;
 
-import cc.mrbird.febs.cos.entity.ScheduleTemplateInfo;
 import cc.mrbird.febs.cos.entity.StudentInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;

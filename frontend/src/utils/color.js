@@ -6,7 +6,6 @@ const updateTheme = primaryColor => {
   if (!primaryColor) {
     return
   }
-  const hideMessage = message.loading('加载主题...', 0)
   function buildIt () {
     if (!window.less) {
       return
@@ -17,12 +16,10 @@ const updateTheme = primaryColor => {
           '@primary-color': primaryColor
         })
         .then(() => {
-          hideMessage()
         })
         .catch((e) => {
           console.log(e)
           message.error('Failed to update theme')
-          hideMessage()
         })
     }, 200)
   }
@@ -40,7 +37,7 @@ const updateTheme = primaryColor => {
         javascriptEnabled: true
       }
     `
-    lessScriptNode.src = 'https://cdn.bootcss.com/less.js/3.9.0/less.min.js'
+    lessScriptNode.src = 'http://cdn.bootcss.com/less.js/3.9.0/less.min.js'
     lessScriptNode.async = true
     lessScriptNode.onload = () => {
       buildIt()

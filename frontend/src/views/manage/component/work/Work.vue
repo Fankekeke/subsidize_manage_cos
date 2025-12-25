@@ -19,11 +19,11 @@
         <img alt="example" style="width: 500px;height: 500px;" src="/static/img/Search_SVG.png"/>
       </a-col>
       <a-col :span="6" style="margin-top: 80px">
-        <p style="font-size: 30px;font-family: SimHei;font-weight: 500">欢迎使用学校行政办公系统</p>
+        <p style="font-size: 30px;font-family: SimHei;font-weight: 500">欢迎使用学校教学系统</p>
         <a-card :bordered="false">
           <span slot="title">
             <a-icon type="user" style="margin-right: 10px" />
-            <span>用户信息</span>
+            <span>导师信息</span>
           </span>
           <div>
             <a-avatar :src="'http://127.0.0.1:9527/imagesWeb/' + userInfo.images.split(',')[0]" shape="square" style="width: 100px;height: 100px;float: left;margin: 10px 0 10px 10px" />
@@ -32,13 +32,28 @@
             </div>
             <br/>
             <div style="float: left;margin-left: 15px;margin-top: 8px">
-              <span style="font-size: 14px;font-family: SimHei">邮箱：{{ userInfo.mail == null ? '- -' : userInfo.mail }}</span>
+<!--              <span style="font-size: 14px;font-family: SimHei">邮箱：{{ userInfo.mail == null ? '- -' : userInfo.mail }}</span>-->
             </div>
             <div style="float: left;margin-left: 15px;margin-top: 8px">
               <span style="font-size: 14px;font-family: SimHei">电话：{{ userInfo.phone == null ? '- -' : userInfo.phone }}</span>
             </div>
           </div>
         </a-card>
+      </a-col>
+      <a-col :span="24">
+        <div style="background:#ECECEC; padding:30px;margin-top: 30px">
+          <a-card :bordered="false">
+            <a-spin :spinning="dataLoading">
+              <a-calendar>
+                <ul slot="dateCellRender" slot-scope="value" class="events">
+                  <li v-for="item in getListData(value)" :key="item.content">
+                    <a-badge :status="item.type" :text="item.content" />
+                  </li>
+                </ul>
+              </a-calendar>
+            </a-spin>
+          </a-card>
+        </div>
       </a-col>
     </a-row>
   </a-card>
@@ -68,7 +83,9 @@ export default {
       userInfo: null,
       memberInfo: null,
       spaceInfo: null,
-      newsList: []
+      newsList: [],
+      courseInfo: [],
+      dataLoading: false,
     }
   },
   computed: {
@@ -80,6 +97,24 @@ export default {
     this.selectBulletinDetail()
   },
   methods: {
+    isDuringDate (beginDateStr, endDateStr, curDataStr) {
+      let curDate = new Date(curDataStr)
+      let beginDate = new Date(beginDateStr)
+      let endDate = new Date(endDateStr)
+      if (curDate >= beginDate && curDate <= endDate) {
+        return true
+      }
+      return false
+    },
+    getListData (value) {
+      let listData = []
+      this.courseInfo.forEach(item => {
+        if ((moment(value).format('YYYY-MM-DD')) === (moment(item.courseDate).format('YYYY-MM-DD'))) {
+          listData.push({type: 'none', content: item.courseName})
+        }
+      })
+      return listData || []
+    },
     newsNext () {
       if (this.newsPage + 1 === this.newsList.length) {
         this.newsPage = 0
@@ -93,12 +128,15 @@ export default {
       this.visible = false
     },
     selectBulletinDetail () {
+      this.dataLoading = true
       this.$get(`/cos/staff-info/selectBulletinDetail/${this.currentUser.userId}`).then((r) => {
         this.userInfo = r.data.user
         this.newsList = r.data.bulletin
         if (this.newsList.length !== 0) {
           this.newsContent = `《${this.newsList[0].title}》 ${this.newsList[0].content.slice(0, 65)}`
         }
+        this.courseInfo = r.data.order
+        this.dataLoading = false
       })
     }
   }

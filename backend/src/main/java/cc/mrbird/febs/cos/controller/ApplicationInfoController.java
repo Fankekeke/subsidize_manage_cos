@@ -5,7 +5,6 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.ApplicationInfo;
 import cc.mrbird.febs.cos.service.IApplicationInfoService;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

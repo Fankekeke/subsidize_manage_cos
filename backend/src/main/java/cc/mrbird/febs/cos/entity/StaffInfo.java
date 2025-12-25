@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
@@ -12,7 +13,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 员工管理
+ * 导师管理
  *
  * @author FanK
  */
@@ -27,7 +28,7 @@ public class StaffInfo implements Serializable {
     private Integer id;
 
     /**
-     * 员工编号
+     * 导师编号
      */
     private String code;
 
@@ -35,6 +36,9 @@ public class StaffInfo implements Serializable {
      * 姓名
      */
     private String name;
+
+    private Integer majorId;
+    private Integer tieId;
 
     /**
      * 性别
@@ -79,7 +83,7 @@ public class StaffInfo implements Serializable {
     /**
      * 邮箱地址
      */
-    private String mail;
+    private String email;
 
     /**
      * 联系方式
@@ -106,16 +110,13 @@ public class StaffInfo implements Serializable {
      * 用户ID
      */
     private Integer userId;
-
-    /**
-     * 所属其他检查机构
-     */
-    private Integer enterpriseId;
-
     /**
      * 岗位管理
      */
     private Integer positionId;
+
+    @TableField(exist = false)
+    private Integer staffId;
 
 
 }

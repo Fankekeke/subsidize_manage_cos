@@ -4,10 +4,10 @@ package cc.mrbird.febs.cos.controller;
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.LeaveComments;
 import cc.mrbird.febs.cos.entity.StaffInfo;
-import cc.mrbird.febs.cos.entity.UserInfo;
+import cc.mrbird.febs.cos.entity.StudentInfo;
 import cc.mrbird.febs.cos.service.ILeaveCommentsService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
-import cc.mrbird.febs.cos.service.IUserInfoService;
+import cc.mrbird.febs.cos.service.IStudentInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -28,9 +28,9 @@ public class LeaveCommentsController {
 
     private final ILeaveCommentsService leaveCommentsService;
 
-    private final IUserInfoService userInfoService;
-
     private final IStaffInfoService staffInfoService;
+
+    private final IStudentInfoService studentInfoService;
 
 
     /**
@@ -89,10 +89,9 @@ public class LeaveCommentsController {
     @PostMapping
     public R save(LeaveComments leaveComments) {
         // 设置用户ID
-        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, leaveComments.getUserId()));
-        if (staffInfo != null) {
-            leaveComments.setUserId(staffInfo.getId());
-            leaveComments.setEnterpriseId(staffInfo.getEnterpriseId());
+        StudentInfo studentInfo = studentInfoService.getOne(Wrappers.<StudentInfo>lambdaQuery().eq(StudentInfo::getUserId, leaveComments.getUserId()));
+        if (studentInfo != null) {
+            leaveComments.setUserId(studentInfo.getId());
         }
         leaveComments.setCreateDate(DateUtil.formatDateTime(new Date()));
         leaveComments.setStatus("0");

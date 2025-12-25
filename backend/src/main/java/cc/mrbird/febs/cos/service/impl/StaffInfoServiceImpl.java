@@ -1,14 +1,11 @@
 package cc.mrbird.febs.cos.service.impl;
 
-import cc.mrbird.febs.cos.dao.AgentInfoMapper;
-import cc.mrbird.febs.cos.entity.AgentInfo;
 import cc.mrbird.febs.cos.entity.BulletinInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.dao.StaffInfoMapper;
-import cc.mrbird.febs.cos.entity.UserInfo;
-import cc.mrbird.febs.cos.service.IAgentInfoService;
 import cc.mrbird.febs.cos.service.IBulletinInfoService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -17,9 +14,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author FanK
@@ -30,15 +29,13 @@ public class StaffInfoServiceImpl extends ServiceImpl<StaffInfoMapper, StaffInfo
 
     private final StaffInfoMapper staffInfoService;
 
-    private final AgentInfoMapper agentInfoService;
-
     private final IBulletinInfoService bulletinInfoService;
 
     /**
-     * 分页获取员工信息
+     * 分页获取导师信息
      *
      * @param page          分页对象
-     * @param staffInfo 员工信息
+     * @param staffInfo 导师信息
      * @return 结果
      */
     @Override
@@ -47,7 +44,20 @@ public class StaffInfoServiceImpl extends ServiceImpl<StaffInfoMapper, StaffInfo
     }
 
     /**
-     * 查询用户信息详情【公告信息】
+     * 查询导师课表信息
+     *
+     * @param staffId 导师ID
+     * @return 结果
+     */
+    @Override
+    public List<LinkedHashMap<String, Object>> queryScheduleByStaffId(Integer staffId) {
+        List<LinkedHashMap<String, Object>> result1 = baseMapper.queryScheduleByStaffId1(staffId);
+        List<LinkedHashMap<String, Object>> result2 = baseMapper.queryScheduleByStaffId2(staffId);
+        return new ArrayList<>(CollectionUtil.addAll(result1, result2));
+    }
+
+    /**
+     * 查询导师信息详情【公告信息】
      *
      * @param userId 主键ID
      * @return 结果
@@ -66,6 +76,7 @@ public class StaffInfoServiceImpl extends ServiceImpl<StaffInfoMapper, StaffInfo
             return result;
         }
         result.put("user", userInfo);
+        result.put("order", this.queryScheduleByStaffId(userId));
 
         // 公告信息
         List<BulletinInfo> bulletinInfoList = bulletinInfoService.list(Wrappers.<BulletinInfo>lambdaQuery().eq(BulletinInfo::getRackUp, "1"));
@@ -74,9 +85,9 @@ public class StaffInfoServiceImpl extends ServiceImpl<StaffInfoMapper, StaffInfo
     }
 
     /**
-     * 查询员工信息
+     * 查询导师信息
      *
-     * @param enterpriseId 其他检查机构id
+     * @param enterpriseId 校企id
      * @return 结果
      */
     @Override
@@ -85,9 +96,9 @@ public class StaffInfoServiceImpl extends ServiceImpl<StaffInfoMapper, StaffInfo
     }
 
     /**
-     * 获取员工列表
+     * 获取导师列表
      *
-     * @param enterpriseId 其他检查机构ID
+     * @param enterpriseId 校企ID
      * @return 结果
      */
     @Override
@@ -96,27 +107,26 @@ public class StaffInfoServiceImpl extends ServiceImpl<StaffInfoMapper, StaffInfo
     }
 
     /**
-     * 根据用户id查询员工信息
+     * 根据用户id查询导师信息
      *
      * @param userId 用户id
      * @return 结果
      */
     @Override
     public LinkedHashMap<String, Object> queryStaffByUserId(Integer userId) {
-        // 获取员工信息
+        // 获取导师信息
         StaffInfo staffInfo = staffInfoService.selectOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, userId));
         // 返回数据
         LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>() {
             {
                 put("staff", staffInfo);
-                put("agent", agentInfoService.selectList(Wrappers.<AgentInfo>lambdaQuery().eq(AgentInfo::getStaffId, staffInfo.getId())));
             }
         };
         return result;
     }
 
     /**
-     * 查询员工信息
+     * 查询导师信息
      *
      * @param ids ids
      * @return 结果

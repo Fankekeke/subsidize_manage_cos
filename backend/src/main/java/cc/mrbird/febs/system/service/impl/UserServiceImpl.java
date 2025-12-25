@@ -5,12 +5,10 @@ import cc.mrbird.febs.common.domain.QueryRequest;
 import cc.mrbird.febs.common.service.CacheService;
 import cc.mrbird.febs.common.utils.SortUtil;
 import cc.mrbird.febs.common.utils.MD5Util;
-import cc.mrbird.febs.cos.entity.EnterpriseInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
-import cc.mrbird.febs.cos.entity.UserInfo;
-import cc.mrbird.febs.cos.service.IEnterpriseInfoService;
+import cc.mrbird.febs.cos.entity.StudentInfo;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
-import cc.mrbird.febs.cos.service.IUserInfoService;
+import cc.mrbird.febs.cos.service.IStudentInfoService;
 import cc.mrbird.febs.system.dao.UserMapper;
 import cc.mrbird.febs.system.dao.UserRoleMapper;
 import cc.mrbird.febs.system.domain.User;
@@ -51,11 +49,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     private UserManager userManager;
     @Autowired
-    private IUserInfoService userInfoService;
-    @Autowired
-    private IEnterpriseInfoService enterpriseService;
-    @Autowired
     private IStaffInfoService staffInfoService;
+    @Autowired
+    private IStudentInfoService studentInfoService;
 
 
     @Override
@@ -187,10 +183,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public void registUser(String username, String password, String name) throws Exception {
-        UserInfo userInfo = new UserInfo();
-        userInfo.setName(name);
-        userInfo.setCode("UR-" + System.currentTimeMillis());
-        userInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+//        UserInfo userInfo = new UserInfo();
+//        userInfo.setName(name);
+//        userInfo.setCode("UR-" + System.currentTimeMillis());
+//        userInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
 
         User user = new User();
         user.setPassword(MD5Util.encrypt(username, password));
@@ -201,8 +197,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setAvatar(User.DEFAULT_AVATAR);
         user.setDescription("注册用户");
         this.save(user);
-        userInfo.setUserId(Math.toIntExact(user.getUserId()));
-        userInfoService.save(userInfo);
+//        userInfo.setUserId(Math.toIntExact(user.getUserId()));
+//        userInfoService.save(userInfo);
 
         UserRole ur = new UserRole();
         ur.setUserId(user.getUserId());
@@ -218,13 +214,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 注册用户
      *
-     * @param username       用户名
-     * @param password       密码
-     * @param enterpriseInfo 账户名称
+     * @param username  用户名
+     * @param password  密码
+     * @param studentInfo 账户名称
      */
     @Override
-    public void registEnterprise(String username, String password, EnterpriseInfo enterpriseInfo) throws Exception {
-        enterpriseInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+    public void registStudent(String username, String password, StudentInfo studentInfo) throws Exception {
+        studentInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
 
         User user = new User();
         user.setPassword(MD5Util.encrypt(username, password));
@@ -235,8 +231,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setAvatar(User.DEFAULT_AVATAR);
         user.setDescription("注册用户");
         this.save(user);
-        enterpriseInfo.setUserId(Math.toIntExact(user.getUserId()));
-        enterpriseService.save(enterpriseInfo);
+        studentInfo.setUserId(Math.toIntExact(user.getUserId()));
+        studentInfoService.save(studentInfo);
 
         UserRole ur = new UserRole();
         ur.setUserId(user.getUserId());

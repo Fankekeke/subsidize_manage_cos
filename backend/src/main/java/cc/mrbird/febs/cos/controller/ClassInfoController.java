@@ -38,8 +38,6 @@ public class ClassInfoController {
 
     private final IStudentInfoService studentInfoService;
 
-    private final ICourseInfoService courseInfoService;
-
     /**
      * 分页获取班级信息
      *

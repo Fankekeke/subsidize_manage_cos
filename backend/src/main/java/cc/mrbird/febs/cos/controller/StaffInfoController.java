@@ -2,9 +2,7 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
-import cc.mrbird.febs.cos.entity.EnterpriseInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
-import cc.mrbird.febs.cos.service.IEnterpriseInfoService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
 import cc.mrbird.febs.system.service.UserService;
 import cn.hutool.core.date.DateUtil;
@@ -14,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -27,20 +26,29 @@ public class StaffInfoController {
 
     private final IStaffInfoService staffInfoService;
 
-    private final IEnterpriseInfoService enterpriseInfoService;
-
     private final UserService userService;
 
     /**
-     * 分页获取员工信息
+     * 分页获取导师信息
      *
      * @param page          分页对象
-     * @param staffInfo 员工信息
+     * @param staffInfo 导师信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<StaffInfo> page, StaffInfo staffInfo) {
         return R.ok(staffInfoService.selectStaffPage(page, staffInfo));
+    }
+
+    /**
+     * 查询导师课表信息
+     *
+     * @param staffId 导师ID
+     * @return 结果
+     */
+    @GetMapping("/queryScheduleByStaffId")
+    public R queryScheduleByStaffId(Integer staffId) {
+        return R.ok(staffInfoService.queryScheduleByStaffId(staffId));
     }
 
     /**
@@ -55,9 +63,9 @@ public class StaffInfoController {
     }
 
     /**
-     * 获取员工列表
+     * 获取导师列表
      *
-     * @param enterpriseId 其他检查机构ID
+     * @param enterpriseId 校企ID
      * @return 结果
      */
     @GetMapping("/queryStaffList")
@@ -66,19 +74,19 @@ public class StaffInfoController {
     }
 
     /**
-     * 获取员工列表
+     * 获取导师列表
      *
-     * @param staffId 其他检查机构ID
+     * @param staffId 校企ID
      * @return 结果
      */
     @GetMapping("/queryStaffList/staff")
     public R queryStaffListByStaff(@RequestParam(value = "staffId") Integer staffId) {
         StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, staffId));
-        return R.ok(staffInfoService.queryStaffListByStaff(staffInfo.getEnterpriseId(), staffInfo.getId()));
+        return R.ok(Collections.emptyList());
     }
 
     /**
-     * 获取员工信息
+     * 获取导师信息
      *
      * @return 结果
      */
@@ -88,7 +96,7 @@ public class StaffInfoController {
     }
 
     /**
-     * 获取员工信息
+     * 获取导师信息
      *
      * @return 结果
      */
@@ -98,7 +106,7 @@ public class StaffInfoController {
     }
 
     /**
-     * 获取员工详细信息
+     * 获取导师详细信息
      *
      * @param id ID
      * @return 结果
@@ -109,28 +117,23 @@ public class StaffInfoController {
     }
 
     /**
-     * 新增员工信息
+     * 新增导师信息
      *
-     * @param staffInfo 员工信息
+     * @param staffInfo 导师信息
      * @return 结果
      */
     @PostMapping
     public R save(StaffInfo staffInfo) throws Exception {
         staffInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         staffInfo.setCode("STF-" + System.currentTimeMillis());
-
-        // 设置所属公司
-        EnterpriseInfo enterpriseInfo = enterpriseInfoService.getOne(Wrappers.<EnterpriseInfo>lambdaQuery().eq(EnterpriseInfo::getUserId, staffInfo.getEnterpriseId()));
-        staffInfo.setEnterpriseId(enterpriseInfo.getId());
-
         userService.registStaff(staffInfo.getCode(), "1234qwer", staffInfo);
         return R.ok(true);
     }
 
     /**
-     * 修改员工信息
+     * 修改导师信息
      *
-     * @param staffInfo 员工信息
+     * @param staffInfo 导师信息
      * @return 结果
      */
     @PutMapping
@@ -139,7 +142,7 @@ public class StaffInfoController {
     }
 
     /**
-     * 删除员工信息
+     * 删除导师信息
      *
      * @param ids 主键IDS
      * @return 结果

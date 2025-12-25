@@ -3,8 +3,6 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.BulletinInfo;
-import cc.mrbird.febs.cos.entity.CourseReserveInfo;
-import cc.mrbird.febs.cos.entity.ScheduleClassInfo;
 import cc.mrbird.febs.cos.entity.StudentInfo;
 import cc.mrbird.febs.cos.service.*;
 import cc.mrbird.febs.system.service.UserService;
@@ -34,10 +32,6 @@ public class StudentInfoController {
     private final IStudentInfoService studentInfoService;
 
     private final UserService usersService;
-
-    private final IScheduleClassInfoService scheduleClassInfoService;
-
-    private final ICourseReserveInfoService courseReserveInfoService;
 
     private final IBulletinInfoService bulletinInfoService;
 
@@ -77,12 +71,6 @@ public class StudentInfoController {
         if (userInfo.getClassId() == null) {
             return R.ok(Collections.emptyList());
         }
-        // 根据班级ID查询课程信息
-        List<LinkedHashMap<String, Object>> scheduleList = scheduleClassInfoService.queryScheduleList(userInfo.getClassId());
-        // 根据学生ID获取通过预约选课
-
-        List<LinkedHashMap<String, Object>> reserveList = courseReserveInfoService.queryScheduleElectiveList(id);
-        result.put("order", CollectionUtil.addAll(scheduleList, reserveList));
 
         // 公告信息
         List<BulletinInfo> bulletinInfoList = bulletinInfoService.list(Wrappers.<BulletinInfo>lambdaQuery().eq(BulletinInfo::getRackUp, "1"));
@@ -120,29 +108,6 @@ public class StudentInfoController {
     @GetMapping("/list")
     public R list() {
         return R.ok(studentInfoService.list());
-    }
-
-    /**
-     * 根据学生ID查询课程信息
-     *
-     * @param studentId 学生信息
-     * @return 结果
-     */
-    @GetMapping("/queryCourseByStudentId")
-    public R queryCourseByStudentId(Integer studentId) {
-        // 获取学生信息
-        StudentInfo studentInfo = studentInfoService.getOne(Wrappers.<StudentInfo>lambdaQuery().eq(StudentInfo::getUserId, studentId));
-        if (studentInfo == null) {
-            return R.ok(Collections.emptyList());
-        }
-        if (studentInfo.getClassId() == null) {
-            return R.ok(Collections.emptyList());
-        }
-        // 根据班级ID查询课程信息
-        List<LinkedHashMap<String, Object>> scheduleList = scheduleClassInfoService.queryScheduleList(studentInfo.getClassId());
-        // 根据学生ID获取通过预约选课
-        List<LinkedHashMap<String, Object>> reserveList = courseReserveInfoService.queryScheduleElectiveList(studentId);
-        return R.ok(CollectionUtil.addAll(scheduleList, reserveList));
     }
 
     /**

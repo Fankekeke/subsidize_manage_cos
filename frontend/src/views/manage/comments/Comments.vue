@@ -7,10 +7,10 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="员工名称"
+                label="学生姓名"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.staffName"/>
+                <a-input v-model="queryParams.studentName"/>
               </a-form-item>
             </a-col>
           </div>
@@ -110,33 +110,29 @@ export default {
     }),
     columns () {
       return [{
-        title: '用户名称',
+        title: '学生姓名',
         ellipsis: true,
-        dataIndex: 'staffName'
+        dataIndex: 'studentName'
       }, {
-        title: '员工头像',
-        dataIndex: 'staffImages',
+        title: '学生头像',
+        dataIndex: 'studentImages',
         customRender: (text, record, index) => {
-          if (!record.staffImages) return <a-avatar shape="square" icon="user" />
+          if (!record.studentImages) return <a-avatar shape="square" icon="user" />
           return <a-popover>
             <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.staffImages.split(',')[0] } />
+              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.studentImages.split(',')[0] } />
             </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.staffImages.split(',')[0] } />
+            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.studentImages.split(',')[0] } />
           </a-popover>
         }
       }, {
-        title: '所属部门',
+        title: '所属专业',
         ellipsis: true,
-        dataIndex: 'deptName'
+        dataIndex: 'majorName'
       }, {
-        title: '职位',
+        title: '所属系',
         ellipsis: true,
-        dataIndex: 'positionName'
-      }, {
-        title: '所属校企',
-        ellipsis: true,
-        dataIndex: 'enterpriseName'
+        dataIndex: 'tieName'
       }, {
         title: '状态',
         dataIndex: 'status',
