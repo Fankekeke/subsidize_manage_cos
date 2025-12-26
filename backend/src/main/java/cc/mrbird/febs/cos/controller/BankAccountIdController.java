@@ -3,7 +3,10 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.BankAccountId;
+import cc.mrbird.febs.cos.entity.StudentInfo;
 import cc.mrbird.febs.cos.service.IBankAccountIdService;
+import cc.mrbird.febs.cos.service.IStudentInfoService;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ import java.util.List;
 public class BankAccountIdController {
 
     private final IBankAccountIdService bankAccountIdService;
+
+    private final IStudentInfoService studentInfoService;
 
     /**
      * 分页获取学生银行账户信息
@@ -64,6 +69,10 @@ public class BankAccountIdController {
      */
     @PostMapping
     public R save(BankAccountId bankAccountId) {
+        StudentInfo studentInfo = studentInfoService.getOne(Wrappers.<StudentInfo>lambdaQuery().eq(StudentInfo::getUserId, bankAccountId.getUserId()));
+        if (studentInfo != null) {
+            bankAccountId.setUserId(studentInfo.getId());
+        }
         return R.ok(bankAccountIdService.save(bankAccountId));
     }
 

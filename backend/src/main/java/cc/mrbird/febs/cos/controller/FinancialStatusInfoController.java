@@ -3,7 +3,10 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.FinancialStatusInfo;
+import cc.mrbird.febs.cos.entity.StudentInfo;
 import cc.mrbird.febs.cos.service.IFinancialStatusInfoService;
+import cc.mrbird.febs.cos.service.IStudentInfoService;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ import java.util.List;
 public class FinancialStatusInfoController {
 
     private final IFinancialStatusInfoService financialStatusInfoService;
+
+    private final IStudentInfoService studentInfoService;
 
     /**
      * 分页获取学生经济情况信息
@@ -64,6 +69,10 @@ public class FinancialStatusInfoController {
      */
     @PostMapping
     public R save(FinancialStatusInfo financialStatusInfo) {
+        StudentInfo studentInfo = studentInfoService.getOne(Wrappers.<StudentInfo>lambdaQuery().eq(StudentInfo::getUserId, financialStatusInfo.getUserId()));
+        if (studentInfo != null) {
+            financialStatusInfo.setUserId(studentInfo.getId());
+        }
         return R.ok(financialStatusInfoService.save(financialStatusInfo));
     }
 

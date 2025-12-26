@@ -27,7 +27,7 @@ public class FinancialStatusInfo implements Serializable {
     /**
      * 学生用户ID
      */
-    private Long userId;
+    private Integer userId;
 
     /**
      * 是否认定为困难生 (1是, 0否)

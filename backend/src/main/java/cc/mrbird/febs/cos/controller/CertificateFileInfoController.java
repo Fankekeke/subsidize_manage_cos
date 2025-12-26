@@ -3,7 +3,10 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.CertificateFileInfo;
+import cc.mrbird.febs.cos.entity.StudentInfo;
 import cc.mrbird.febs.cos.service.ICertificateFileInfoService;
+import cc.mrbird.febs.cos.service.IStudentInfoService;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ import java.util.List;
 public class CertificateFileInfoController {
 
     private final ICertificateFileInfoService certificateFileInfoService;
+
+    private final IStudentInfoService studentInfoService;
 
     /**
      * 分页获取学生证书信息
@@ -64,6 +69,10 @@ public class CertificateFileInfoController {
      */
     @PostMapping
     public R save(CertificateFileInfo certificateFileInfo) {
+        StudentInfo studentInfo = studentInfoService.getOne(Wrappers.<StudentInfo>lambdaQuery().eq(StudentInfo::getUserId, certificateFileInfo.getUserId()));
+        if (studentInfo != null) {
+            certificateFileInfo.setUserId(studentInfo.getId());
+        }
         return R.ok(certificateFileInfoService.save(certificateFileInfo));
     }
 

@@ -3,8 +3,11 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.ApplicationInfo;
+import cc.mrbird.febs.cos.entity.StudentInfo;
 import cc.mrbird.febs.cos.service.IApplicationInfoService;
+import cc.mrbird.febs.cos.service.IStudentInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,8 @@ import java.util.List;
 public class ApplicationInfoController {
 
     private final IApplicationInfoService applicationInfoService;
+
+    private final IStudentInfoService studentInfoService;
 
     /**
      * 分页获取资助申请记录信息
@@ -66,6 +71,10 @@ public class ApplicationInfoController {
      */
     @PostMapping
     public R save(ApplicationInfo applicationInfo) {
+        StudentInfo studentInfo = studentInfoService.getOne(Wrappers.<StudentInfo>lambdaQuery().eq(StudentInfo::getUserId, applicationInfo.getUserId()));
+        if (studentInfo != null) {
+            applicationInfo.setUserId(studentInfo.getId());
+        }
         applicationInfo.setApplicationData(DateUtil.formatDateTime(new Date()));
         return R.ok(applicationInfoService.save(applicationInfo));
     }
