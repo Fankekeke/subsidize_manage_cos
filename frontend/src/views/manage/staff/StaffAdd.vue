@@ -92,16 +92,6 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label='所属部门' v-bind="formItemLayout">
-            <a-select v-decorator="[
-              'deptId',
-              { rules: [{ required: true, message: '请输入所属部门!' }] }
-              ]">
-              <a-select-option :value="item.id" v-for="(item, index) in deptList" :key="index">{{ item.deptName }}</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
           <a-form-item label='所属岗位' v-bind="formItemLayout">
             <a-select v-decorator="[
               'positionId',
@@ -209,7 +199,6 @@ export default {
     }
   },
   mounted () {
-    this.selectDeptList()
     this.selectPositionList()
     this.getTieList()
     this.getMajorList()
@@ -223,11 +212,6 @@ export default {
     getMajorList () {
       this.$get('/cos/major-info/list').then((r) => {
         this.majorList = r.data.data
-      })
-    },
-    selectDeptList () {
-      this.$get(`/cos/dept-info/list`).then((r) => {
-        this.deptList = r.data.data
       })
     },
     selectPositionList () {

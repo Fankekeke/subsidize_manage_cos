@@ -131,7 +131,7 @@ export default {
         dataIndex: 'content',
         ellipsis: true
       }, {
-        title: '所属校企',
+        title: '所属检查机构',
         ellipsis: true,
         dataIndex: 'enterpriseName'
       }, {

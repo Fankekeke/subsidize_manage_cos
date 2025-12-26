@@ -87,7 +87,7 @@ public class StaffInfoServiceImpl extends ServiceImpl<StaffInfoMapper, StaffInfo
     /**
      * 查询导师信息
      *
-     * @param enterpriseId 校企id
+     * @param enterpriseId 检查机构id
      * @return 结果
      */
     @Override
@@ -98,7 +98,7 @@ public class StaffInfoServiceImpl extends ServiceImpl<StaffInfoMapper, StaffInfo
     /**
      * 获取导师列表
      *
-     * @param enterpriseId 校企ID
+     * @param enterpriseId 检查机构ID
      * @return 结果
      */
     @Override

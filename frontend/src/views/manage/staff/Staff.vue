@@ -23,16 +23,6 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="所属部门"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.deptId" allowClear>
-                  <a-select-option :value="item.id" v-for="(item, index) in deptList" :key="index">{{ item.deptName }}</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
                 label="所属岗位"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
@@ -241,15 +231,9 @@ export default {
   },
   mounted () {
     this.fetch()
-    this.selectDeptList()
     this.selectPositionList()
   },
   methods: {
-    selectDeptList () {
-      this.$get(`/cos/dept-info/list`).then((r) => {
-        this.deptList = r.data.data
-      })
-    },
     selectPositionList () {
       this.$get(`/cos/position-info/list`).then((r) => {
         this.positionList = r.data.data

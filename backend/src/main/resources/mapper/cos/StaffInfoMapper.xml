@@ -24,14 +24,11 @@
         si.position_id,
         si.tie_id,
         si.major_id,
-        di.dept_name,
         poi.name as positionName,
         ti.name as tieName,
         mi.name as majorName
         from
         staff_info si
-        left join dept_info di on
-        (di.id = si.dept_id)
         left join position_info poi on
         (poi.id = si.position_id)
         left join tie_info ti on (ti.id = si.tie_id)
@@ -145,12 +142,9 @@
         si.del_flag,
         si.dept_id,
         si.position_id,
-        di.dept_name,
         poi.name as positionName
         from
         staff_info si
-        left join dept_info di on
-        (di.id = si.dept_id)
         left join position_info poi on
         (poi.id = si.position_id)
         where
@@ -180,12 +174,9 @@
         si.del_flag,
         si.dept_id,
         si.position_id,
-        di.dept_name,
         poi.name as positionName
         from
         staff_info si
-        left join dept_info di on
-        (di.id = si.dept_id)
         left join position_info poi on
         (poi.id = si.position_id)
         where
@@ -216,12 +207,9 @@
         si.del_flag,
         si.dept_id,
         si.position_id,
-        di.dept_name,
         poi.name as positionName
         from
         staff_info si
-        left join dept_info di on
-        (di.id = si.dept_id)
         left join position_info poi on
         (poi.id = si.position_id)
         where
