@@ -21,6 +21,7 @@ import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -183,11 +184,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public void registUser(String username, String password, String name) throws Exception {
-//        UserInfo userInfo = new UserInfo();
-//        userInfo.setName(name);
-//        userInfo.setCode("UR-" + System.currentTimeMillis());
-//        userInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-
         User user = new User();
         user.setPassword(MD5Util.encrypt(username, password));
         user.setUsername(username);
@@ -197,12 +193,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setAvatar(User.DEFAULT_AVATAR);
         user.setDescription("注册用户");
         this.save(user);
-//        userInfo.setUserId(Math.toIntExact(user.getUserId()));
-//        userInfoService.save(userInfo);
+
+        StudentInfo studentInfo = studentInfoService.getOne(Wrappers.<StudentInfo>lambdaQuery().eq(StudentInfo::getIdCard, name));
+        studentInfoService.update(Wrappers.<StudentInfo>lambdaUpdate().set(StudentInfo::getUserId, user.getUserId()).eq(StudentInfo::getId, studentInfo.getId()));
 
         UserRole ur = new UserRole();
         ur.setUserId(user.getUserId());
-        ur.setRoleId(75L); // 注册用户角色 ID
+        ur.setRoleId(76L); // 注册用户角色 ID
         this.userRoleMapper.insert(ur);
 
         // 创建用户默认的个性化配置

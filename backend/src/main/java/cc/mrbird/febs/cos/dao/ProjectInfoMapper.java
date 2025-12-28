@@ -3,6 +3,7 @@ package cc.mrbird.febs.cos.dao;
 import cc.mrbird.febs.cos.entity.ProjectInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.LinkedHashMap;
 
@@ -20,5 +21,5 @@ public interface ProjectInfoMapper extends BaseMapper<ProjectInfo> {
      * @param projectInfo 资助项目信息
      * @return 结果
      */
-    IPage<LinkedHashMap<String, Object>> queryProjectPage(IPage<ProjectInfo> page, ProjectInfo projectInfo);
+    IPage<LinkedHashMap<String, Object>> queryProjectPage(IPage<ProjectInfo> page, @Param("queryParam") ProjectInfo projectInfo);
 }

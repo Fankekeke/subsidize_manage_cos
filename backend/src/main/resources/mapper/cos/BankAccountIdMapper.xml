@@ -2,4 +2,45 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.BankAccountIdMapper">
 
+    <!-- 分页获取学生银行账户信息 -->
+    <select id="queryBankAccountPage" resultType="java.util.LinkedHashMap">
+        SELECT
+        bd.id,
+        bd.user_id,
+        bd.bank_name,
+        bd.account_name,
+        bd.account_number,
+
+        stui.name,
+        stui.sex,
+        stui.phone,
+        stui.email,
+        stui.images,
+        stui.user_id,
+        ci.name as className,
+        si.name as staffName,
+        si.images as staffImages,
+        ti.name as tieName,
+        mi.name as majorName
+        FROM
+        bank_account_id bd
+        LEFT JOIN student_info stui ON (stui.id = bd.user_id)
+        left join major_info mi on (mi.id = stui.major_id)
+        left join class_info ci on (ci.id = stui.class_id)
+        left join staff_info si on (si.id = ci.teacher_id)
+        left join tie_info ti on (ti.id = ci.tie_id)
+        WHERE
+        1 = 1
+        <if test="queryParam.bankName != null and queryParam.bankName != ''">
+            AND bd.bank_name LIKE CONCAT('%',#{queryParam.bankName},'%')
+        </if>
+        <if test="queryParam.accountName != null and queryParam.accountName != ''">
+            AND bd.account_name LIKE CONCAT('%',#{queryParam.accountName},'%')
+        </if>
+        <if test="queryParam.studentName != null and queryParam.studentName != ''">
+            AND stui.name LIKE CONCAT('%',#{queryParam.studentName},'%')
+        </if>
+        ORDER BY
+        bd.id DESC
+    </select>
 </mapper>

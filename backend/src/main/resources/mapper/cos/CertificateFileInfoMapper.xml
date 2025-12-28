@@ -2,4 +2,46 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.CertificateFileInfoMapper">
 
+    <!-- 分页获取学生证书信息 -->
+    <select id="queryCertificatePage" resultType="java.util.LinkedHashMap">
+        SELECT
+        cfi.id,
+        cfi.user_id,
+        cfi.file_name,
+        cfi.file_type,
+        cfi.file_path,
+        cfi.upload_time,
+
+        stui.name,
+        stui.sex,
+        stui.phone,
+        stui.email,
+        stui.images,
+        stui.user_id,
+        ci.name as className,
+        si.name as staffName,
+        si.images as staffImages,
+        ti.name as tieName,
+        mi.name as majorName
+        FROM
+        certificate_file_info cfi
+        LEFT JOIN student_info stui ON (cfi.user_id = stui.id)
+        left join major_info mi on (mi.id = stui.major_id)
+        left join class_info ci on (ci.id = stui.class_id)
+        left join staff_info si on (si.id = ci.teacher_id)
+        left join tie_info ti on (ti.id = ci.tie_id)
+        WHERE
+        1 = 1
+        <if test="queryParam.fileName != null and queryParam.fileName != ''">
+            AND cfi.file_name LIKE CONCAT('%',#{queryParam.fileName},'%')
+        </if>
+        <if test="queryParam.fileType != null and queryParam.fileType != ''">
+            AND cfi.file_type LIKE CONCAT('%',#{queryParam.fileType},'%')
+        </if>
+        <if test="queryParam.studentName != null and queryParam.studentName != ''">
+            AND stui.name LIKE CONCAT('%',#{queryParam.studentName},'%')
+        </if>
+        ORDER BY
+        cfi.upload_time DESC
+    </select>
 </mapper>

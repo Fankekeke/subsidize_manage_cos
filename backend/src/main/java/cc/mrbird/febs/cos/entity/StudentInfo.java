@@ -79,6 +79,12 @@ public class StudentInfo implements Serializable {
     private String images;
 
     /**
+     * 头像
+     */
+    private String avatar;
+    private String idCard;
+
+    /**
      * 所属账户
      */
     private Integer userId;

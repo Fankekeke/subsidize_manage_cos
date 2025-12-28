@@ -1,6 +1,7 @@
 package cc.mrbird.febs.cos.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,6 +43,9 @@ public class BankAccountId implements Serializable {
      * 银行卡号
      */
     private String accountNumber;
+
+    @TableField(exist = false)
+    private String studentName;
 
 
 }

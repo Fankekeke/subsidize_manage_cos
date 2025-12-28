@@ -2,4 +2,45 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.FinancialStatusInfoMapper">
 
+    <!-- 分页获取学生经济情况信息 -->
+    <select id="queryFinancialStatusPage" resultType="java.util.LinkedHashMap">
+        SELECT
+        fsi.id,
+        fsi.user_id,
+        fsi.is_hardship,
+        fsi.family_income,
+        fsi.family_members,
+        fsi.proof_file_path,
+        fsi.last_update_time,
+        fsi.remark,
+
+        stui.name,
+        stui.sex,
+        stui.phone,
+        stui.email,
+        stui.images,
+        stui.user_id,
+        ci.name as className,
+        si.name as staffName,
+        si.images as staffImages,
+        ti.name as tieName,
+        mi.name as majorName
+        FROM
+        financial_status_info fsi
+        LEFT JOIN student_info stui ON (stui.id = fsi.user_id)
+        left join major_info mi on (mi.id = stui.major_id)
+        left join class_info ci on (ci.id = stui.class_id)
+        left join staff_info si on (si.id = ci.teacher_id)
+        left join tie_info ti on (ti.id = ci.tie_id)
+        WHERE
+        1 = 1
+        <if test="queryParam.isHardship != null and queryParam.isHardship != ''">
+            AND fsi.is_hardship = #{queryParam.isHardship}
+        </if>
+        <if test="queryParam.studentName != null and queryParam.studentName != ''">
+            AND stui.name LIKE CONCAT('%',#{queryParam.studentName},'%')
+        </if>
+        ORDER BY
+        fsi.last_update_time DESC
+    </select>
 </mapper>

@@ -4,6 +4,7 @@ import cc.mrbird.febs.cos.entity.FinancialStatusInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.LinkedHashMap;
 
@@ -21,5 +22,5 @@ public interface FinancialStatusInfoMapper extends BaseMapper<FinancialStatusInf
      * @param financialStatusInfo 学生经济情况信息
      * @return 结果
      */
-    IPage<LinkedHashMap<String, Object>> queryFinancialStatusPage(Page<FinancialStatusInfo> page, FinancialStatusInfo financialStatusInfo);
+    IPage<LinkedHashMap<String, Object>> queryFinancialStatusPage(Page<FinancialStatusInfo> page, @Param("queryParam") FinancialStatusInfo financialStatusInfo);
 }

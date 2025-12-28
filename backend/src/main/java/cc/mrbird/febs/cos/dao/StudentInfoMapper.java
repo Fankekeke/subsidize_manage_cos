@@ -26,6 +26,14 @@ public interface StudentInfoMapper extends BaseMapper<StudentInfo> {
     IPage<LinkedHashMap<String, Object>> queryStudentPage(Page<StudentInfo> page, @Param("studentInfo") StudentInfo studentInfo);
 
     /**
+     * 查询用户信息详情
+     *
+     * @param userId 主键ID
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> queryStudentDetail(@Param("userId") Integer userId);
+
+    /**
      * 根据ID查询学生信息
      *
      * @param ids 学生ID

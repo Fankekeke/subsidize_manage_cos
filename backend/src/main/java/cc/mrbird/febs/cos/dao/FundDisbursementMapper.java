@@ -3,6 +3,7 @@ package cc.mrbird.febs.cos.dao;
 import cc.mrbird.febs.cos.entity.FundDisbursement;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.LinkedHashMap;
 
@@ -20,5 +21,5 @@ public interface FundDisbursementMapper extends BaseMapper<FundDisbursement> {
      * @param fundDisbursement 资金发放记录信息
      * @return 结果
      */
-    IPage<LinkedHashMap<String, Object>> selectFundDisbursementPage(IPage<FundDisbursement> page, FundDisbursement fundDisbursement);
+    IPage<LinkedHashMap<String, Object>> selectFundDisbursementPage(IPage<FundDisbursement> page, @Param("queryParam") FundDisbursement fundDisbursement);
 }

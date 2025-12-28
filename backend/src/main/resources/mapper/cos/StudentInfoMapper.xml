@@ -17,6 +17,9 @@
         stui.create_date,
         stui.images,
         stui.user_id,
+        stui.avatar,
+        stui.id_card,
+
         ci.name as className,
         si.name as staffName,
         si.images as staffImages,
@@ -45,6 +48,39 @@
             AND stui.user_id = #{studentInfo.studentId}
         </if>
         order by stui.create_date desc
+    </select>
+
+    <!-- 查询用户信息详情 -->
+    <select id="queryStudentDetail" resultType="java.util.LinkedHashMap">
+        select
+            stui.id,
+            stui.code,
+            stui.name,
+            stui.sex,
+            stui.major_id,
+            stui.class_id,
+            stui.phone,
+            stui.email,
+            stui.content,
+            stui.create_date,
+            stui.images,
+            stui.user_id,
+            stui.avatar,
+            stui.id_card,
+
+            ci.name as className,
+            si.name as staffName,
+            si.images as staffImages,
+            ti.name as tieName,
+            mi.name as majorName
+        from
+            student_info stui
+                left join major_info mi on (mi.id = stui.major_id)
+                left join class_info ci on (ci.id = stui.class_id)
+                left join staff_info si on (si.id = ci.teacher_id)
+                left join tie_info ti on (ti.id = ci.tie_id)
+        where 1 = 1
+        and stui.user_id = #{userId}
     </select>
 
     <!-- 根据ID查询学生信息 -->

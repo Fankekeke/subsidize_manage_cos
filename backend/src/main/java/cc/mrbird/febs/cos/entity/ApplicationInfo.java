@@ -1,6 +1,7 @@
 package cc.mrbird.febs.cos.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,5 +49,20 @@ public class ApplicationInfo implements Serializable {
      */
     private String applicationData;
 
+    private String firstAuditDate;
+    private String firstAuditStatus;
+    private String firstAuditContent;
+    private String firstAuditSign;
+    private String adminAuditDate;
+    private String adminAuditStatus;
+    private String adminAuditContent;
+    private String adminAuditSign;
+    private String content;
+
+    @TableField(exist = false)
+    private String studentName;
+
+    @TableField(exist = false)
+    private String projectName;
 
 }

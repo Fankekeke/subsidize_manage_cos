@@ -202,16 +202,6 @@ export default {
           }
         }
       }, {
-        title: '所属部门',
-        dataIndex: 'deptName',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
         title: '岗位',
         dataIndex: 'positionName',
         customRender: (text, row, index) => {

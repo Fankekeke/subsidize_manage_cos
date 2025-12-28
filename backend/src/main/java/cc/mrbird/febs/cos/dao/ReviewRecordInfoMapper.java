@@ -4,6 +4,7 @@ import cc.mrbird.febs.cos.entity.ReviewRecordInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.LinkedHashMap;
 
@@ -21,5 +22,5 @@ public interface ReviewRecordInfoMapper extends BaseMapper<ReviewRecordInfo> {
      * @param reviewRecordInfo 资助项目信息
      * @return 结果
      */
-    IPage<LinkedHashMap<String, Object>> queryReviewPage(Page<ReviewRecordInfo> page, ReviewRecordInfo reviewRecordInfo);
+    IPage<LinkedHashMap<String, Object>> queryReviewPage(Page<ReviewRecordInfo> page, @Param("queryParam") ReviewRecordInfo reviewRecordInfo);
 }

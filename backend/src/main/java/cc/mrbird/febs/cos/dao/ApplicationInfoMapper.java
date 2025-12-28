@@ -4,6 +4,7 @@ import cc.mrbird.febs.cos.entity.ApplicationInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.LinkedHashMap;
 
@@ -21,5 +22,5 @@ public interface ApplicationInfoMapper extends BaseMapper<ApplicationInfo> {
      * @param applicationInfo 资助申请记录信息
      * @return 结果
      */
-    IPage<LinkedHashMap<String, Object>> queryApplicationPage(Page<ApplicationInfo> page, ApplicationInfo applicationInfo);
+    IPage<LinkedHashMap<String, Object>> queryApplicationPage(Page<ApplicationInfo> page, @Param("queryParam") ApplicationInfo applicationInfo);
 }

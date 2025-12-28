@@ -65,6 +65,14 @@
             </a-select>
           </a-form-item>
         </a-col>
+        <a-col :span="12">
+          <a-form-item label='身份号码' v-bind="formItemLayout">
+            <a-input v-decorator="[
+            'idCard',
+            { rules: [{ required: true, message: '请输入身份号码!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
         <a-col :span="24">
           <a-form-item label='备注' v-bind="formItemLayout">
             <a-textarea :rows="6" v-decorator="[
@@ -201,7 +209,7 @@ export default {
     },
     setFormValues ({...dishes}) {
       this.rowId = dishes.id
-      let fields = ['name', 'sex', 'majorId', 'classId', 'phone', 'email', 'content', 'tieId']
+      let fields = ['name', 'sex', 'majorId', 'classId', 'phone', 'email', 'content', 'tieId', 'idCard']
       let obj = {}
       Object.keys(dishes).forEach((key) => {
         if (key === 'images') {

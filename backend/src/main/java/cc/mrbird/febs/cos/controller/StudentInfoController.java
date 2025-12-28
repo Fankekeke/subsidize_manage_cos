@@ -2,6 +2,7 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.dao.StudentInfoMapper;
 import cc.mrbird.febs.cos.entity.BulletinInfo;
 import cc.mrbird.febs.cos.entity.StudentInfo;
 import cc.mrbird.febs.cos.service.*;
@@ -30,6 +31,8 @@ import java.util.List;
 public class StudentInfoController {
 
     private final IStudentInfoService studentInfoService;
+
+    private final StudentInfoMapper studentInfoMapper;
 
     private final UserService usersService;
 
@@ -62,16 +65,11 @@ public class StudentInfoController {
                 put("bulletin", Collections.emptyList());
             }
         };
-        StudentInfo userInfo = studentInfoService.getOne(Wrappers.<StudentInfo>lambdaQuery().eq(StudentInfo::getUserId, id));
+        LinkedHashMap<String, Object> userInfo = studentInfoMapper.queryStudentDetail(id);
         if (userInfo == null) {
             return R.ok(result);
         }
         result.put("user", userInfo);
-
-        if (userInfo.getClassId() == null) {
-            return R.ok(Collections.emptyList());
-        }
-
         // 公告信息
         List<BulletinInfo> bulletinInfoList = bulletinInfoService.list(Wrappers.<BulletinInfo>lambdaQuery().eq(BulletinInfo::getRackUp, "1"));
         result.put("bulletin", bulletinInfoList);
@@ -120,8 +118,8 @@ public class StudentInfoController {
     public R save(StudentInfo studentInfo) throws Exception {
         studentInfo.setCode("STU-" + System.currentTimeMillis());
         studentInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-        usersService.registStudent(studentInfo.getCode(), "1234qwer", studentInfo);
-        return R.ok(true);
+//        usersService.registStudent(studentInfo.getCode(), "1234qwer", studentInfo);
+        return R.ok(studentInfoService.save(studentInfo));
     }
 
     /**
