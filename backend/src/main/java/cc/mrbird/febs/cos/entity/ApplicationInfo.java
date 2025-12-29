@@ -40,7 +40,7 @@ public class ApplicationInfo implements Serializable {
     private String applicationDate;
 
     /**
-     * 申请状态 (资助申请总览)
+     * 申请状态 (资助申请总览) '待初审','待复审','待终审','已通过','已驳回'
      */
     private String status;
 

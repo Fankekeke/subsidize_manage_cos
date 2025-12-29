@@ -38,6 +38,27 @@ public class ProjectInfoController {
     }
 
     /**
+     * 查询可申请项目信息
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @GetMapping("/queryProjectByAvailable")
+    public R queryProjectByAvailable(Integer userId) {
+        return R.ok(projectInfoService.queryProjectByAvailable(userId));
+    }
+
+    /**
+     * 查询可资助项目流程信息
+     *
+     * @return 结果
+     */
+    @GetMapping("/queryProjectProcess")
+    public R queryProjectProcess() {
+        return R.ok(projectInfoService.queryProjectProcess());
+    }
+
+    /**
      * 查询资助项目信息详情
      *
      * @param id 主键ID

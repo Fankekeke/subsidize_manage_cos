@@ -51,6 +51,17 @@ public class StudentInfoController {
     }
 
     /**
+     * 查询学生信息详情
+     *
+     * @param id 主键ID
+     * @return 详情
+     */
+    @GetMapping("/queryStudentDetail")
+    public R queryStudentDetail(Integer id) {
+        return R.ok(studentInfoService.queryStudentDetail(id));
+    }
+
+    /**
      * 查询用户信息详情【公告信息】
      *
      * @param id 主键ID

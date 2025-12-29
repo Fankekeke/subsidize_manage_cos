@@ -1,6 +1,10 @@
 package cc.mrbird.febs.cos.service.impl;
 
+import cc.mrbird.febs.cos.dao.CertificateFileInfoMapper;
+import cc.mrbird.febs.cos.dao.FinancialStatusInfoMapper;
 import cc.mrbird.febs.cos.entity.BulletinInfo;
+import cc.mrbird.febs.cos.entity.CertificateFileInfo;
+import cc.mrbird.febs.cos.entity.FinancialStatusInfo;
 import cc.mrbird.febs.cos.entity.StudentInfo;
 import cc.mrbird.febs.cos.dao.StudentInfoMapper;
 import cc.mrbird.febs.cos.service.IBulletinInfoService;
@@ -28,6 +32,10 @@ public class StudentInfoServiceImpl extends ServiceImpl<StudentInfoMapper, Stude
 
     private final IBulletinInfoService bulletinInfoService;
 
+    private final CertificateFileInfoMapper certificateFileInfoMapper;
+
+    private final FinancialStatusInfoMapper financialStatusInfoMapper;
+
     /**
      * 分页获取学生信息
      *
@@ -38,6 +46,28 @@ public class StudentInfoServiceImpl extends ServiceImpl<StudentInfoMapper, Stude
     @Override
     public IPage<LinkedHashMap<String, Object>> queryStudentPage(Page<StudentInfo> page, StudentInfo studentInfo) {
         return baseMapper.queryStudentPage(page, studentInfo);
+    }
+
+    /**
+     * 查询学生信息详情
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @Override
+    public LinkedHashMap<String, Object> queryStudentDetail(Integer userId) {
+        LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+        StudentInfo studentInfo = this.getById(userId);
+        // 学生信息
+        LinkedHashMap<String, Object> userInfo = baseMapper.queryStudentDetail(studentInfo.getUserId());
+        // 学生证书
+        List<CertificateFileInfo> certificateFileInfoList = certificateFileInfoMapper.selectList(Wrappers.<CertificateFileInfo>lambdaQuery().eq(CertificateFileInfo::getUserId, userId));
+        // 家庭情况
+        List<FinancialStatusInfo> financialStatusInfoList = financialStatusInfoMapper.selectList(Wrappers.<FinancialStatusInfo>lambdaQuery().eq(FinancialStatusInfo::getUserId, userId));
+        result.put("financial", financialStatusInfoList);
+        result.put("certificate", certificateFileInfoList);
+        result.put("user", userInfo);
+        return result;
     }
 
     /**

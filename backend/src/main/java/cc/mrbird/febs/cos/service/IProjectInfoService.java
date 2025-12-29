@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * 资助项目表 service层
@@ -21,4 +22,19 @@ public interface IProjectInfoService extends IService<ProjectInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> queryProjectPage(IPage<ProjectInfo> page, ProjectInfo projectInfo);
+
+    /**
+     * 项目进度
+     *
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> queryProjectProcess();
+
+    /**
+     * 查询可申请项目信息
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    List<ProjectInfo> queryProjectByAvailable(Integer userId);
 }

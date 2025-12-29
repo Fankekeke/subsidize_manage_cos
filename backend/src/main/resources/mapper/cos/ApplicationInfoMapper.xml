@@ -62,4 +62,63 @@
         ORDER BY
         ai.application_date DESC
     </select>
+
+    <!-- 分页获取资助申请记录信息 -->
+    <select id="queryApplicationByIds" resultType="java.util.LinkedHashMap">
+        SELECT
+        ai.id,
+        ai.project_id,
+        ai.user_id,
+        ai.application_date,
+        ai.status,
+        ai.application_data,
+        ai.first_audit_date,
+        ai.first_audit_status,
+        ai.first_audit_content,
+        ai.first_audit_sign,
+        ai.admin_audit_date,
+        ai.admin_audit_status,
+        ai.admin_audit_content,
+        ai.admin_audit_sign,
+        ai.content,
+
+        pi.project_name,
+        pi.project_type,
+        pi.start_date,
+        pi.end_date,
+        pi.amount_per_person,
+        pi.quota,
+        pi.policy_text,
+
+        stui.name,
+        stui.sex,
+        stui.phone,
+        stui.email,
+        stui.images,
+        stui.user_id,
+        ci.name as className,
+        si.name as staffName,
+        si.images as staffImages,
+        ti.name as tieName,
+        mi.name as majorName
+        FROM
+        application_info ai
+        LEFT JOIN project_info pi ON (pi.id = ai.project_id)
+        LEFT JOIN student_info stui ON (stui.id = ai.user_id)
+        left join major_info mi on (mi.id = stui.major_id)
+        left join class_info ci on (ci.id = stui.class_id)
+        left join staff_info si on (si.id = ci.teacher_id)
+        left join tie_info ti on (ti.id = ci.tie_id)
+        WHERE
+        1 = 1
+        <if test="ids != null and ids.size()>0">
+            AND ai.id IN
+            <foreach collection="ids" item="id" index="index" open="(" close=")"
+                     separator=",">
+                #{id}
+            </foreach>
+        </if>
+        ORDER BY
+        ai.application_date DESC
+    </select>
 </mapper>

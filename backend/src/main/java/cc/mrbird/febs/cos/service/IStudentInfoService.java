@@ -24,6 +24,14 @@ public interface IStudentInfoService extends IService<StudentInfo> {
     IPage<LinkedHashMap<String, Object>> queryStudentPage(Page<StudentInfo> page, StudentInfo studentInfo);
 
     /**
+     * 查询用户信息详情
+     *
+     * @param userId 主键ID
+     * @return 详情
+     */
+    LinkedHashMap<String, Object> queryStudentDetail(Integer userId);
+
+    /**
      * 查询用户信息详情【公告信息】
      *
      * @param userId 主键ID

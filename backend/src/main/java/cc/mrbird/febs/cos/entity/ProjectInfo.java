@@ -1,6 +1,7 @@
 package cc.mrbird.febs.cos.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -70,7 +71,7 @@ public class ProjectInfo implements Serializable {
     private Integer quota;
 
     /**
-     * 项目状态
+     * 项目状态 ('发布中','已截止','已暂停')
      */
     private String status;
 
@@ -79,5 +80,16 @@ public class ProjectInfo implements Serializable {
      */
     private String policyText;
 
+    /**
+     * 申请人数
+     */
+    @TableField(exist = false)
+    private Integer applicationNum;
+
+    /**
+     * 自审核
+     */
+    @TableField(exist = false)
+    private String selfAudit;
 
 }
