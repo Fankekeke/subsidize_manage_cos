@@ -157,6 +157,7 @@ export default {
       })
       this.form.validateFields((err, values) => {
         if (!err) {
+          values.userId = this.currentUser.userId
           values.proofFilePath = images.length > 0 ? images.join(',') : null
           this.loading = true
           this.$post('/cos/financial-status-info', {

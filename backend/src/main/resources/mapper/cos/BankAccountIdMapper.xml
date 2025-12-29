@@ -31,6 +31,9 @@
         left join tie_info ti on (ti.id = ci.tie_id)
         WHERE
         1 = 1
+        <if test="queryParam.userId != null and queryParam.userId != ''">
+            AND stui.user_id = #{queryParam.userId}
+        </if>
         <if test="queryParam.bankName != null and queryParam.bankName != ''">
             AND bd.bank_name LIKE CONCAT('%',#{queryParam.bankName},'%')
         </if>

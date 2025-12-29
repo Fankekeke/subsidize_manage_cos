@@ -127,6 +127,7 @@ export default {
       })
       this.form.validateFields((err, values) => {
         if (!err) {
+          values.userId = this.currentUser.userId
           values.filePath = images.length > 0 ? images.join(',') : null
           this.loading = true
           this.$post('/cos/certificate-file-info', {

@@ -303,6 +303,7 @@ export default {
       if (params.status === undefined) {
         delete params.status
       }
+      params.userId = this.currentUser.userId
       this.$get('/cos/certificate-file-info/page', {
         ...params
       }).then((r) => {

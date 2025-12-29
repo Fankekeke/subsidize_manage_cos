@@ -34,6 +34,9 @@
         left join tie_info ti on (ti.id = ci.tie_id)
         WHERE
         1 = 1
+        <if test="queryParam.userId != null and queryParam.userId != ''">
+            AND stui.user_id = #{queryParam.userId}
+        </if>
         <if test="queryParam.isHardship != null and queryParam.isHardship != ''">
             AND fsi.is_hardship = #{queryParam.isHardship}
         </if>

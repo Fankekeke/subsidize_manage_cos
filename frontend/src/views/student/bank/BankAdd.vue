@@ -117,6 +117,7 @@ export default {
       })
       this.form.validateFields((err, values) => {
         if (!err) {
+          values.userId = this.currentUser.userId
           this.loading = true
           this.$post('/cos/bank-account-id', {
             ...values

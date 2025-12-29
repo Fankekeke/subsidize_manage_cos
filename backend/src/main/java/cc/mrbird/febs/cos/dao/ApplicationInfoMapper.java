@@ -31,5 +31,5 @@ public interface ApplicationInfoMapper extends BaseMapper<ApplicationInfo> {
      * @param ids 申请ID
      * @return 结果
      */
-    IPage<LinkedHashMap<String, Object>> queryApplicationByIds(@Param("ids") List<Integer> ids);
+    List<LinkedHashMap<String, Object>> queryApplicationByIds(@Param("ids") List<Integer> ids);
 }

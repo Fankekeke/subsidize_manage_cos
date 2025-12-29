@@ -1,349 +1,310 @@
 <template>
-  <a-card :bordered="false" class="card-area">
-    <div :class="advanced ? 'search' : null">
-      <!-- 搜索区域 -->
-<!--      <a-form layout="horizontal">-->
-<!--        <a-row :gutter="15">-->
-<!--          <div :class="advanced ? null: 'fold'">-->
-<!--            <a-col :md="6" :sm="24">-->
-<!--              <a-form-item-->
-<!--                label="学生姓名"-->
-<!--                :labelCol="{span: 5}"-->
-<!--                :wrapperCol="{span: 18, offset: 1}">-->
-<!--                <a-input v-model="queryParams.name"/>-->
-<!--              </a-form-item>-->
-<!--            </a-col>-->
-<!--            <a-col :md="6" :sm="24">-->
-<!--              <a-form-item-->
-<!--                label="学生班级"-->
-<!--                :labelCol="{span: 5}"-->
-<!--                :wrapperCol="{span: 18, offset: 1}">-->
-<!--                <a-input v-model="queryParams.className"/>-->
-<!--              </a-form-item>-->
-<!--            </a-col>-->
-<!--            <a-col :md="6" :sm="24">-->
-<!--              <a-form-item-->
-<!--                label="所属导师"-->
-<!--                :labelCol="{span: 5}"-->
-<!--                :wrapperCol="{span: 18, offset: 1}">-->
-<!--                <a-input v-model="queryParams.staffName"/>-->
-<!--              </a-form-item>-->
-<!--            </a-col>-->
-<!--          </div>-->
-<!--          <span style="float: right; margin-top: 3px;">-->
-<!--            <a-button type="primary" @click="search">查询</a-button>-->
-<!--            <a-button style="margin-left: 8px" @click="reset">重置</a-button>-->
-<!--          </span>-->
-<!--        </a-row>-->
-<!--      </a-form>-->
-    </div>
-    <div>
-      <div class="operator">
-<!--        <a-button type="primary" ghost @click="add">新增</a-button>-->
-<!--        <a-button @click="batchDelete">删除</a-button>-->
+  <a-row :gutter="20">
+    <a-col :span="7">
+      <a-card :loading="loading" :bordered="false">
+        <a-form :form="form" layout="vertical">
+          <a-form :form="form" layout="vertical">
+            <a-row :gutter="20">
+              <a-col :span="12">
+                <a-form-item label='学生姓名' v-bind="formItemLayout">
+                  <a-input v-decorator="[
+            'name',
+            { rules: [{ required: true, message: '请输入学生姓名!' }] }
+            ]"/>
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label='性别' v-bind="formItemLayout">
+                  <a-select v-decorator="[
+              'sex',
+              { rules: [{ required: true, message: '请输入性别!' }] }
+              ]">
+                    <a-select-option value="1">男</a-select-option>
+                    <a-select-option value="2">女</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label='联系方式' v-bind="formItemLayout">
+                  <a-input v-decorator="[
+            'phone',
+            { rules: [{ required: true, message: '请输入联系方式!' }] }
+            ]"/>
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label='邮箱地址' v-bind="formItemLayout">
+                  <a-input v-decorator="[
+            'email',
+            { rules: [{ required: true, message: '请输入邮箱地址!' }] }
+            ]"/>
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label='所属专业' v-bind="formItemLayout">
+                  <a-select disabled style="width: 100%" v-decorator="[
+            'majorId',
+            { rules: [{ required: true, message: '请输入所属专业!' }] }
+            ]">
+                    <a-select-option :value="item.id" v-for="(item, index) in majorList" :key="index">{{ item.name }}</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label='所属班级' v-bind="formItemLayout">
+                  <a-select disabled style="width: 100%" v-decorator="[
+            'classId',
+            { rules: [{ required: true, message: '请输入所属班级!' }] }
+            ]">
+                    <a-select-option :value="item.id" v-for="(item, index) in classList" :key="index">{{ item.name }}</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label='身份号码' v-bind="formItemLayout">
+                  <a-input disabled v-decorator="[
+            'idCard',
+            { rules: [{ required: true, message: '请输入身份号码!' }] }
+            ]"/>
+                </a-form-item>
+              </a-col>
+              <a-col :span="24">
+                <a-form-item label='备注' v-bind="formItemLayout">
+                  <a-textarea :rows="6" v-decorator="[
+            'content',
+             { rules: [{ required: true, message: '请输入备注!' }] }
+            ]"/>
+                </a-form-item>
+              </a-col>
+              <a-col :span="24">
+                <a-form-item label='图册' v-bind="formItemLayout">
+                  <a-upload
+                    name="avatar"
+                    action="http://127.0.0.1:9527/file/fileUpload/"
+                    list-type="picture-card"
+                    :file-list="fileList"
+                    @preview="handlePreview"
+                    @change="picHandleChange"
+                  >
+                    <div v-if="fileList.length < 8">
+                      <a-icon type="plus" />
+                      <div class="ant-upload-text">
+                        Upload
+                      </div>
+                    </div>
+                  </a-upload>
+                  <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+                    <img alt="example" style="width: 100%" :src="previewImage" />
+                  </a-modal>
+                </a-form-item>
+              </a-col>
+            </a-row>
+          </a-form>
+        </a-form>
+        <a-button key="submit" type="primary" :loading="loading" @click="handleSubmit">
+          修改
+        </a-button>
+      </a-card>
+    </a-col>
+    <a-col :span="17">
+      <div style="background:#ECECEC; padding:30px;margin-top: 30px">
+        <a-card :bordered="false">
+          <a-spin :spinning="dataLoading">
+            <a-calendar>
+              <ul slot="dateCellRender" slot-scope="value" class="events">
+                <li v-for="item in getListData(value)" :key="item.content">
+                  <a-badge :status="item.type" :text="item.content" />
+                </li>
+              </ul>
+            </a-calendar>
+          </a-spin>
+        </a-card>
       </div>
-      <!-- 表格区域 -->
-      <a-table ref="TableInfo"
-               :columns="columns"
-               :rowKey="record => record.id"
-               :dataSource="dataSource"
-               :pagination="pagination"
-               :loading="loading"
-               :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
-               :scroll="{ x: 900 }"
-               @change="handleTableChange">
-        <template slot="operation" slot-scope="text, record">
-          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
-          <a-icon type="file-search" @click="dishesViewOpen(record)" title="详 情" style="margin-left: 15px"></a-icon>
-        </template>
-      </a-table>
-    </div>
-    <dishes-add
-      v-if="dishesAdd.visiable"
-      @close="handledishesAddClose"
-      @success="handledishesAddSuccess"
-      :dishesAddVisiable="dishesAdd.visiable">
-    </dishes-add>
-    <dishes-edit
-      ref="dishesEdit"
-      @close="handledishesEditClose"
-      @success="handledishesEditSuccess"
-      :dishesEditVisiable="dishesEdit.visiable">
-    </dishes-edit>
-    <dishes-view
-      @close="handledishesViewClose"
-      :dishesShow="dishesView.visiable"
-      :dishesData="dishesView.data">
-    </dishes-view>
-  </a-card>
+    </a-col>
+  </a-row>
 </template>
 
 <script>
-import RangeDate from '@/components/datetime/RangeDate'
-import dishesAdd from './StudentAdd.vue'
-import dishesEdit from './StudentEdit.vue'
-import dishesView from './StudentView.vue'
 import {mapState} from 'vuex'
 import moment from 'moment'
 moment.locale('zh-cn')
-
+function getBase64 (file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = error => reject(error)
+  })
+}
+const formItemLayout = {
+  labelCol: { span: 24 },
+  wrapperCol: { span: 24 }
+}
 export default {
-  name: 'dishes',
-  components: {dishesAdd, dishesEdit, dishesView, RangeDate},
-  data () {
-    return {
-      advanced: false,
-      dishesAdd: {
-        visiable: false
-      },
-      dishesEdit: {
-        visiable: false
-      },
-      dishesView: {
-        visiable: false,
-        data: null
-      },
-      queryParams: {},
-      filteredInfo: null,
-      sortedInfo: null,
-      paginationInfo: null,
-      dataSource: [],
-      selectedRowKeys: [],
-      loading: false,
-      pagination: {
-        pageSizeOptions: ['10', '20', '30', '40', '100'],
-        defaultCurrent: 1,
-        defaultPageSize: 10,
-        showQuickJumper: true,
-        showSizeChanger: true,
-        showTotal: (total, range) => `显示 ${range[0]} ~ ${range[1]} 条记录，共 ${total} 条记录`
-      },
-      userList: []
-    }
-  },
+  name: 'User',
   computed: {
     ...mapState({
       currentUser: state => state.account.user
-    }),
-    columns () {
-      return [{
-        title: '学生编号',
-        ellipsis: true,
-        dataIndex: 'code'
-      }, {
-        title: '学生姓名',
-        ellipsis: true,
-        dataIndex: 'name'
-      }, {
-        title: '性别',
-        dataIndex: 'sex',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case '1':
-              return <a-tag>男</a-tag>
-            case '2':
-              return <a-tag>女</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
-        title: '照片',
-        dataIndex: 'images',
-        customRender: (text, record, index) => {
-          if (!record.images) return <a-avatar shape="square" icon="user" />
-          return <a-popover>
-            <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
-            </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
-          </a-popover>
-        }
-      }, {
-        title: '所属班级',
-        ellipsis: true,
-        dataIndex: 'className'
-      }, {
-        title: '所属导师',
-        dataIndex: 'staffName',
-        customRender: (text, row, index) => {
-          return <a-tag>{{ text }}</a-tag>
-        }
-      }, {
-        title: '系',
-        ellipsis: true,
-        dataIndex: 'tieName'
-      }, {
-        title: '学生专业',
-        ellipsis: true,
-        dataIndex: 'majorName',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '创建时间',
-        dataIndex: 'createDate',
-        ellipsis: true,
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '操作',
-        dataIndex: 'operation',
-        scopedSlots: {customRender: 'operation'}
-      }]
+    })
+  },
+  data () {
+    return {
+      form: this.$form.createForm(this),
+      formItemLayout,
+      loading: false,
+      courseInfo: [],
+      dataLoading: false,
+      fileList: [],
+      previewVisible: false,
+      previewImage: '',
+      expertInfo: null,
+      staffList: [],
+      tieList: [],
+      majorList: [],
+      classList: []
     }
   },
   mounted () {
-    this.fetch()
+    this.getExpertInfo(this.currentUser.userId)
+    this.getStaffList()
+    this.getTieList()
+    this.getMajorList()
+    this.getClassList()
+    this.getProjectList()
   },
   methods: {
-    dishesViewOpen (row) {
-      this.dishesView.data = row
-      this.dishesView.visiable = true
+    getProjectList () {
+      this.$get('/cos/project-info/list').then((r) => {
+        this.courseInfo = r.data.data
+      })
     },
-    handledishesViewClose () {
-      this.dishesView.visiable = false
+    getClassList () {
+      this.$get('/cos/class-info/list').then((r) => {
+        this.classList = r.data.data
+      })
     },
-    onSelectChange (selectedRowKeys) {
-      this.selectedRowKeys = selectedRowKeys
+    getTieList () {
+      this.$get('/cos/tie-info/list').then((r) => {
+        this.tieList = r.data.data
+      })
     },
-    toggleAdvanced () {
-      this.advanced = !this.advanced
+    getMajorList () {
+      this.$get('/cos/major-info/list').then((r) => {
+        this.majorList = r.data.data
+      })
     },
-    add () {
-      this.dishesAdd.visiable = true
+    getStaffList () {
+      this.$get('/cos/staff-info/list').then((r) => {
+        this.staffList = r.data.data
+      })
     },
-    handledishesAddClose () {
-      this.dishesAdd.visiable = false
-    },
-    handledishesAddSuccess () {
-      this.dishesAdd.visiable = false
-      this.$message.success('新增学生成功')
-      this.search()
-    },
-    edit (record) {
-      this.$refs.dishesEdit.setFormValues(record)
-      this.dishesEdit.visiable = true
-    },
-    handledishesEditClose () {
-      this.dishesEdit.visiable = false
-    },
-    handledishesEditSuccess () {
-      this.dishesEdit.visiable = false
-      this.$message.success('修改学生成功')
-      this.search()
-    },
-    handleDeptChange (value) {
-      this.queryParams.deptId = value || ''
-    },
-    batchDelete () {
-      if (!this.selectedRowKeys.length) {
-        this.$message.warning('请选择需要删除的记录')
-        return
+    isDuringDate (beginDateStr, endDateStr, curDataStr) {
+      let curDate = new Date(curDataStr)
+      let beginDate = new Date(beginDateStr)
+      let endDate = new Date(endDateStr)
+      if (curDate >= beginDate && curDate <= endDate) {
+        return true
       }
-      let that = this
-      this.$confirm({
-        title: '确定删除所选中的记录?',
-        content: '当您点击确定按钮后，这些记录将会被彻底删除',
-        centered: true,
-        onOk () {
-          let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/student-info/' + ids).then(() => {
-            that.$message.success('删除成功')
-            that.selectedRowKeys = []
-            that.search()
-          })
-        },
-        onCancel () {
-          that.selectedRowKeys = []
+      return false
+    },
+    getListData (value) {
+      let listData = []
+      console.log(this.courseInfo)
+      this.courseInfo.forEach(item => {
+        let currentValue = moment(value).format('YYYY-MM-DD')
+        let startDate = moment(item.startDate).format('YYYY-MM-DD')
+        let endDate = moment(item.endDate).format('YYYY-MM-DD')
+
+        if (this.isDuringDate(startDate, endDate, currentValue)) {
+          listData.push({type: 'success', content: item.projectName})
         }
       })
+      return listData || []
     },
-    search () {
-      let {sortedInfo, filteredInfo} = this
-      let sortField, sortOrder
-      // 获取当前列的排序和列的过滤规则
-      if (sortedInfo) {
-        sortField = sortedInfo.field
-        sortOrder = sortedInfo.order
-      }
-      this.fetch({
-        sortField: sortField,
-        sortOrder: sortOrder,
-        ...this.queryParams,
-        ...filteredInfo
-      })
-    },
-    reset () {
-      // 取消选中
-      this.selectedRowKeys = []
-      // 重置分页
-      this.$refs.TableInfo.pagination.current = this.pagination.defaultCurrent
-      if (this.paginationInfo) {
-        this.paginationInfo.current = this.pagination.defaultCurrent
-        this.paginationInfo.pageSize = this.pagination.defaultPageSize
-      }
-      // 重置列过滤器规则
-      this.filteredInfo = null
-      // 重置列排序规则
-      this.sortedInfo = null
-      // 重置查询参数
-      this.queryParams = {}
-      this.fetch()
-    },
-    handleTableChange (pagination, filters, sorter) {
-      // 将这三个参数赋值给Vue data，用于后续使用
-      this.paginationInfo = pagination
-      this.filteredInfo = filters
-      this.sortedInfo = sorter
-
-      this.fetch({
-        sortField: sorter.field,
-        sortOrder: sorter.order,
-        ...this.queryParams,
-        ...filters
-      })
-    },
-    fetch (params = {}) {
-      // 显示loading
-      this.loading = true
-      if (this.paginationInfo) {
-        // 如果分页信息不为空，则设置表格当前第几页，每页条数，并设置查询分页参数
-        this.$refs.TableInfo.pagination.current = this.paginationInfo.current
-        this.$refs.TableInfo.pagination.pageSize = this.paginationInfo.pageSize
-        params.size = this.paginationInfo.pageSize
-        params.current = this.paginationInfo.current
-      } else {
-        // 如果分页信息为空，则设置为默认值
-        params.size = this.pagination.defaultPageSize
-        params.current = this.pagination.defaultCurrent
-      }
-      params.studentId = this.currentUser.userId
-      this.$get('/cos/student-info/page', {
-        ...params
+    getExpertInfo (userId) {
+      this.dataLoading = true
+      this.$get(`/cos/student-info/queryStudentByUserId`, {
+        userId
       }).then((r) => {
-        let data = r.data.data
-        const pagination = {...this.pagination}
-        pagination.total = data.total
-        this.dataSource = data.records
-        this.pagination = pagination
-        // 数据加载完毕，关闭loading
-        this.loading = false
+        this.expertInfo = r.data.data
+        this.setFormValues(this.expertInfo)
+        this.dataLoading = false
+      })
+    },
+    handleCancel () {
+      this.previewVisible = false
+    },
+    async handlePreview (file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj)
+      }
+      this.previewImage = file.url || file.preview
+      this.previewVisible = true
+    },
+    picHandleChange ({ fileList }) {
+      this.fileList = fileList
+    },
+    imagesInit (images) {
+      if (images !== null && images !== '') {
+        let imageList = []
+        images.split(',').forEach((image, index) => {
+          imageList.push({uid: index, name: image, status: 'done', url: 'http://127.0.0.1:9527/imagesWeb/' + image})
+        })
+        this.fileList = imageList
+      }
+    },
+    setFormValues ({...expert}) {
+      this.rowId = expert.id
+      let fields = ['name', 'sex', 'majorId', 'classId', 'phone', 'email', 'content', 'tieId', 'idCard']
+      let obj = {}
+      Object.keys(expert).forEach((key) => {
+        if (key === 'images') {
+          this.fileList = []
+          this.imagesInit(expert['images'])
+        }
+        if (key === 'sex') {
+          expert[key] = expert[key].toString()
+        }
+        if (fields.indexOf(key) !== -1) {
+          this.form.getFieldDecorator(key)
+          obj[key] = expert[key]
+        }
+      })
+      this.form.setFieldsValue(obj)
+    },
+    handleSubmit () {
+      // 获取图片List
+      let images = []
+      this.fileList.forEach(image => {
+        if (image.response !== undefined) {
+          images.push(image.response)
+        } else {
+          images.push(image.name)
+        }
+      })
+      this.form.validateFields((err, values) => {
+        values.id = this.rowId
+        values.images = images.length > 0 ? images.join(',') : null
+        if (!err) {
+          this.loading = true
+          this.$put('/cos/user-info', {
+            ...values
+          }).then((r) => {
+            this.$message.success('更新成功')
+            this.loading = false
+            this.getExpertInfo(this.currentUser.userId)
+          }).catch(() => {
+            this.loading = false
+          })
+        }
       })
     }
-  },
-  watch: {}
+  }
 }
 </script>
-<style lang="less" scoped>
-@import "../../../../static/less/Common";
+
+<style scoped>
+>>> .ant-badge-status-text {
+  font-size: 10px;
+}
 </style>

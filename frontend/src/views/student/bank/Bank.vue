@@ -300,6 +300,7 @@ export default {
       if (params.status === undefined) {
         delete params.status
       }
+      params.userId = this.currentUser.userId
       this.$get('/cos/bank-account-id/page', {
         ...params
       }).then((r) => {
