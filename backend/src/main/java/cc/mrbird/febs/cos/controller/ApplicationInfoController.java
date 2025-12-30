@@ -80,6 +80,26 @@ public class ApplicationInfoController {
     }
 
     /**
+     * 导师审核
+     *
+     * @param applicationInfo 资助申请记录信息
+     * @return 资助申请记录信息
+     */
+    public R staffAudit(ApplicationInfo applicationInfo) {
+        return R.ok(applicationInfoService.staffAudit(applicationInfo));
+    }
+
+    /**
+     * 管理员审核
+     *
+     * @param applicationInfo 资助申请记录信息
+     * @return 资助申请记录信息
+     */
+    public R adminAudit(ApplicationInfo applicationInfo) {
+        return R.ok(applicationInfoService.adminAudit(applicationInfo));
+    }
+
+    /**
      * 修改资助申请记录信息
      *
      * @param applicationInfo 资助申请记录信息

@@ -85,6 +85,26 @@ public class StudentInfo implements Serializable {
     private String idCard;
 
     /**
+     * 民族
+     */
+    private String nationality;
+
+    /**
+     * 政治面貌
+     */
+    private String politicalAffiliation;
+
+    /**
+     * 入学时间
+     */
+    private String admissionDate;
+
+    /**
+     * 出生日期
+     */
+    private String birthday;
+
+    /**
      * 所属账户
      */
     private Integer userId;

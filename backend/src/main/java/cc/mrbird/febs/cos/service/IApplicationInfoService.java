@@ -22,4 +22,20 @@ public interface IApplicationInfoService extends IService<ApplicationInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> queryApplicationPage(Page<ApplicationInfo> page, ApplicationInfo applicationInfo);
+
+    /**
+     * 导师审核
+     *
+     * @param applicationInfo 资助申请记录信息
+     * @return 结果
+     */
+    Boolean staffAudit(ApplicationInfo applicationInfo);
+
+    /**
+     * 管理员审核
+     *
+     * @param applicationInfo 资助申请记录信息
+     * @return 结果
+     */
+    Boolean adminAudit(ApplicationInfo applicationInfo);
 }

@@ -54,7 +54,31 @@ public class FinancialStatusInfo implements Serializable {
      * 最后更新时间
      */
     private String lastUpdateTime;
+
+    /**
+     * 备注
+     */
     private String remark;
+
+    /**
+     * 家庭户口（0.城镇 1.农村）
+     */
+    private String registration;
+
+    /**
+     * 收入来源
+     */
+    private String sourcesIncome;
+
+    /**
+     * 家庭地址
+     */
+    private String address;
+
+    /**
+     * 邮政编码
+     */
+    private String postalCode;
 
     @TableField(exist = false)
     private String studentName;

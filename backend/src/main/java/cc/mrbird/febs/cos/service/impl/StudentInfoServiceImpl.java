@@ -39,7 +39,7 @@ public class StudentInfoServiceImpl extends ServiceImpl<StudentInfoMapper, Stude
     /**
      * 分页获取学生信息
      *
-     * @param page                 分页对象
+     * @param page        分页对象
      * @param studentInfo 学生信息
      * @return 结果
      */

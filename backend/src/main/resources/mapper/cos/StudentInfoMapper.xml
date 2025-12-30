@@ -19,6 +19,10 @@
         stui.user_id,
         stui.avatar,
         stui.id_card,
+        stui.nationality,
+        stui.political_affiliation,
+        stui.admission_date,
+        stui.birthday,
 
         ci.name as className,
         si.name as staffName,

@@ -13,6 +13,10 @@
         fsi.proof_file_path,
         fsi.last_update_time,
         fsi.remark,
+        fsi.registration,
+        fsi.sources_income,
+        fsi.address,
+        fsi.postal_code,
 
         stui.name,
         stui.sex,

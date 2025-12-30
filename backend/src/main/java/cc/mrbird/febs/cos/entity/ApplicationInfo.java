@@ -49,15 +49,61 @@ public class ApplicationInfo implements Serializable {
      */
     private String applicationData;
 
+    /**
+     * 初审时间
+     */
     private String firstAuditDate;
+
+    /**
+     * 初审结果
+     */
     private String firstAuditStatus;
+
+    /**
+     * 初审意见
+     */
     private String firstAuditContent;
+
+    /**
+     * 初审签名
+     */
     private String firstAuditSign;
+
+    /**
+     * 管理员审核时间
+     */
     private String adminAuditDate;
+
+    /**
+     * 管理员审核结果
+     */
     private String adminAuditStatus;
+
+    /**
+     * 管理员审核意见
+     */
     private String adminAuditContent;
+
+    /**
+     * 管理员审核签名
+     */
     private String adminAuditSign;
+
+    /**
+     * 申请内容
+     */
     private String content;
+
+    /**
+     * 银行ID
+     */
+    private Integer bankId;
+
+    /**
+     * 申请文件路径
+     */
+    private String filePath;
+    private Integer staffId;
 
     @TableField(exist = false)
     private String studentName;
