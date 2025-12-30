@@ -73,6 +73,44 @@
             ]"/>
           </a-form-item>
         </a-col>
+        <a-col :span="12">
+          <a-form-item label='民族' v-bind="formItemLayout">
+            <a-input v-decorator="[
+            'nationality',
+            { rules: [{ required: true, message: '请输入民族!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='政治面貌' v-bind="formItemLayout">
+            <a-input v-decorator="[
+            'politicalAffiliation',
+            { rules: [{ required: true, message: '请输入政治面貌!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='入学时间' v-bind="formItemLayout">
+            <a-date-picker
+              style="width: 100%"
+              v-decorator="[
+        'admissionDate',
+        { rules: [{ required: true, message: '请选择入学时间!' }] }
+        ]"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='出生日期' v-bind="formItemLayout">
+            <a-date-picker
+              style="width: 100%"
+              v-decorator="[
+        'birthday',
+        { rules: [{ required: true, message: '请选择出生日期!' }] }
+        ]"
+            />
+          </a-form-item>
+        </a-col>
         <a-col :span="24">
           <a-form-item label='备注' v-bind="formItemLayout">
             <a-textarea :rows="6" v-decorator="[
@@ -209,12 +247,15 @@ export default {
     },
     setFormValues ({...dishes}) {
       this.rowId = dishes.id
-      let fields = ['name', 'sex', 'majorId', 'classId', 'phone', 'email', 'content', 'tieId', 'idCard']
+      let fields = ['name', 'sex', 'majorId', 'classId', 'phone', 'email', 'content', 'tieId', 'idCard', 'nationality', 'politicalAffiliation', 'birthday', 'admissionDate']
       let obj = {}
       Object.keys(dishes).forEach((key) => {
         if (key === 'images') {
           this.fileList = []
           this.imagesInit(dishes['images'])
+        }
+        if ((key === 'birthday' || key === 'admissionDate') && dishes[key] !== null) {
+          dishes[key] = moment(dishes[key])
         }
         if (fields.indexOf(key) !== -1) {
           this.form.getFieldDecorator(key)
@@ -244,6 +285,12 @@ export default {
       this.form.validateFields((err, values) => {
         values.id = this.rowId
         values.images = images.length > 0 ? images.join(',') : null
+        if (values.admissionDate) {
+          values.admissionDate = moment(values.admissionDate).format('YYYY-MM-DD')
+        }
+        if (values.birthday) {
+          values.birthday = moment(values.birthday).format('YYYY-MM-DD')
+        }
         if (!err) {
           this.loading = true
           this.$put('/cos/student-info', {

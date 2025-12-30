@@ -48,6 +48,41 @@
             />
           </a-form-item>
         </a-col>
+        <a-col :span="12">
+          <a-form-item label='家庭户口' v-bind="formItemLayout">
+            <a-select v-decorator="[
+              'registration',
+              { rules: [{ required: true, message: '请选择项目类型!' }] }
+              ]">
+              <a-select-option value="0">城镇</a-select-option>
+              <a-select-option value="1">农村</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='收入来源' v-bind="formItemLayout">
+            <a-input v-decorator="[
+            'sourcesIncome',
+            { rules: [{ required: true, message: '请输入收入来源!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='家庭地址' v-bind="formItemLayout">
+            <a-input v-decorator="[
+            'address',
+            { rules: [{ required: true, message: '请输入家庭地址!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='邮政编码' v-bind="formItemLayout">
+            <a-input v-decorator="[
+            'postalCode',
+            { rules: [{ required: true, message: '请输入邮政编码!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
         <a-col :span="24">
           <a-form-item label='证明文件' v-bind="formItemLayout">
             <a-upload-dragger
@@ -154,7 +189,7 @@ export default {
     },
     setFormValues ({...dishes}) {
       this.rowId = dishes.id
-      let fields = ['isHardship', 'familyIncome', 'familyMembers', 'proofFilePath', 'remark']
+      let fields = ['isHardship', 'familyIncome', 'familyMembers', 'proofFilePath', 'remark', 'registration', 'sourcesIncome', 'address', 'postalCode']
       let obj = {}
       Object.keys(dishes).forEach((key) => {
         if (key === 'proofFilePath') {

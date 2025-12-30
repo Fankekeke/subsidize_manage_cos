@@ -7,7 +7,7 @@
             <a-col :span="6">
               <a-card hoverable>
                 <a-row>
-                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本月班级课表数量</a-col>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本月申请数量</a-col>
                   <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
                   <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
                     {{ titleData.monthNum }}
@@ -19,7 +19,7 @@
             <a-col :span="6">
               <a-card hoverable>
                 <a-row>
-                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本月选课数量</a-col>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本月审核通过数量</a-col>
                   <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
                   <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
                     {{ titleData.monthAlertNum }}
@@ -31,7 +31,7 @@
             <a-col :span="6">
               <a-card hoverable>
                 <a-row>
-                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年班级课表数量</a-col>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年申请数量</a-col>
                   <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
                   <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
                     {{ titleData.yearNum }}
@@ -43,7 +43,7 @@
             <a-col :span="6">
               <a-card hoverable>
                 <a-row>
-                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年选课数量</a-col>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年审核通过数量</a-col>
                   <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
                   <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
                     {{ titleData.yearAlertNum }}
@@ -139,7 +139,7 @@ export default {
           enabled: false
         },
         title: {
-          text: '近十天选秀课表统计',
+          text: '近十天资助通过统计',
           align: 'left'
         },
         markers: {
@@ -158,7 +158,7 @@ export default {
           height: 300
         },
         title: {
-          text: '近十天班级课表统计',
+          text: '近十天资助申请统计',
           align: 'left'
         },
         plotOptions: {
@@ -279,7 +279,7 @@ export default {
   },
   methods: {
     selectHomeData () {
-      this.$get('/cos/schedule-class-info/homeData').then((r) => {
+      this.$get('/cos/application-info/homeData').then((r) => {
         let titleData = { staffNum: r.data.staffNum, studentNum: r.data.studentNum, majorNum: r.data.majorNum, classNum: r.data.classNum }
         this.$emit('setTitle', titleData)
         this.titleData.monthNum = r.data.monthNum

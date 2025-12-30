@@ -2,4 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.FamilyMembersMapper">
 
+    <!-- 分页获取学生家庭成员信息 -->
+    <select id="queryFamilyMembersPage" resultType="java.util.LinkedHashMap">
+        SELECT
+        fm.id,
+        fm.user_id,
+        fm.name,
+        fm.birthday,
+        fm.relation,
+        fm.work_unit,
+        fm.income,
+
+        stui.name,
+        stui.sex,
+        stui.phone,
+        stui.email,
+        stui.images,
+        stui.user_id,
+        ci.name as className,
+        si.name as staffName,
+        si.images as staffImages,
+        ti.name as tieName,
+        mi.name as majorName
+        FROM
+        family_members fm
+        LEFT JOIN student_info stui ON (stui.id = fm.user_id)
+        left join major_info mi on (mi.id = stui.major_id)
+        left join class_info ci on (ci.id = stui.class_id)
+        left join staff_info si on (si.id = ci.teacher_id)
+        left join tie_info ti on (ti.id = ci.tie_id)
+        WHERE
+        1 = 1
+        <if test="queryParam.userId != null and queryParam.userId != ''">
+            AND stui.user_id = #{queryParam.userId}
+        </if>
+        <if test="queryParam.studentName != null and queryParam.studentName != ''">
+            AND stui.name LIKE CONCAT('%',#{queryParam.studentName},'%')
+        </if>
+        ORDER BY
+        stui.id
+    </select>
 </mapper>

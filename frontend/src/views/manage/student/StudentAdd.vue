@@ -73,6 +73,44 @@
             ]"/>
           </a-form-item>
         </a-col>
+        <a-col :span="12">
+          <a-form-item label='民族' v-bind="formItemLayout">
+            <a-input v-decorator="[
+            'nationality',
+            { rules: [{ required: true, message: '请输入民族!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='政治面貌' v-bind="formItemLayout">
+            <a-input v-decorator="[
+            'politicalAffiliation',
+            { rules: [{ required: true, message: '请输入政治面貌!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='入学时间' v-bind="formItemLayout">
+            <a-date-picker
+              style="width: 100%"
+              v-decorator="[
+        'admissionDate',
+        { rules: [{ required: true, message: '请选择入学时间!' }] }
+        ]"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='出生日期' v-bind="formItemLayout">
+            <a-date-picker
+              style="width: 100%"
+              v-decorator="[
+        'birthday',
+        { rules: [{ required: true, message: '请选择出生日期!' }] }
+        ]"
+            />
+          </a-form-item>
+        </a-col>
         <a-col :span="24">
           <a-form-item label='备注' v-bind="formItemLayout">
             <a-textarea :rows="6" v-decorator="[
@@ -211,6 +249,12 @@ export default {
         images.push(image.response)
       })
       this.form.validateFields((err, values) => {
+        if (values.admissionDate) {
+          values.admissionDate = moment(values.admissionDate).format('YYYY-MM-DD')
+        }
+        if (values.birthday) {
+          values.birthday = moment(values.birthday).format('YYYY-MM-DD')
+        }
         values.images = images.length > 0 ? images.join(',') : null
         if (!err) {
           this.loading = true

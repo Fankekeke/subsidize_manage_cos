@@ -4,6 +4,7 @@ import cc.mrbird.febs.cos.entity.InsuranceInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.LinkedHashMap;
 
@@ -21,5 +22,5 @@ public interface InsuranceInfoMapper extends BaseMapper<InsuranceInfo> {
      * @param insuranceInfo 学生参保情况信息
      * @return 结果
      */
-    IPage<LinkedHashMap<String, Object>> queryInsuranceInfoPage(Page<InsuranceInfo> page, InsuranceInfo insuranceInfo);
+    IPage<LinkedHashMap<String, Object>> queryInsuranceInfoPage(Page<InsuranceInfo> page, @Param("queryParam") InsuranceInfo insuranceInfo);
 }

@@ -4,6 +4,7 @@ import cc.mrbird.febs.cos.entity.FamilyMembers;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.LinkedHashMap;
 
@@ -21,5 +22,5 @@ public interface FamilyMembersMapper extends BaseMapper<FamilyMembers> {
      * @param familyMembers 学生家庭成员信息
      * @return 结果
      */
-    IPage<LinkedHashMap<String, Object>> queryFamilyMembersPage(Page<FamilyMembers> page, FamilyMembers familyMembers);
+    IPage<LinkedHashMap<String, Object>> queryFamilyMembersPage(Page<FamilyMembers> page, @Param("queryParam") FamilyMembers familyMembers);
 }

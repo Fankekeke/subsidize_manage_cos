@@ -140,9 +140,9 @@ public class ApplicationInfoServiceImpl extends ServiceImpl<ApplicationInfoMappe
         result.put("yearAlertNum", baseMapper.selectAlertByMonth(year, null));
 
         // 近十天申请统计
-        result.put("numDayList", baseMapper.selectDataNumWithinDays(null));
+        result.put("numDayList", baseMapper.selectDataNumWithinDays());
         // 近十天审核通过统计
-        result.put("alertDayList", baseMapper.selectAlertNumWithinDays(null));
+        result.put("alertDayList", baseMapper.selectAlertNumWithinDays());
         // 公告信息
         result.put("bulletin", bulletinInfoService.list(Wrappers.<BulletinInfo>lambdaQuery().eq(BulletinInfo::getRackUp, 1)));
 

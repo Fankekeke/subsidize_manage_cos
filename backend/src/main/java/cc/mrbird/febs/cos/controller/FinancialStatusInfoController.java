@@ -6,6 +6,7 @@ import cc.mrbird.febs.cos.entity.FinancialStatusInfo;
 import cc.mrbird.febs.cos.entity.StudentInfo;
 import cc.mrbird.febs.cos.service.IFinancialStatusInfoService;
 import cc.mrbird.febs.cos.service.IStudentInfoService;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -84,6 +85,7 @@ public class FinancialStatusInfoController {
      */
     @PutMapping
     public R edit(FinancialStatusInfo financialStatusInfo) {
+        financialStatusInfo.setLastUpdateTime(DateUtil.formatDateTime(DateUtil.date()));
         return R.ok(financialStatusInfoService.updateById(financialStatusInfo));
     }
 

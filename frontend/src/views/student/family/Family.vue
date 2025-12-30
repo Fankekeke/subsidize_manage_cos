@@ -13,17 +13,6 @@
                 <a-input v-model="queryParams.studentName"/>
               </a-form-item>
             </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="贫困学生"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.isHardship" allowClear>
-                  <a-select-option value="0">否</a-select-option>
-                  <a-select-option value="1">是</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
           </div>
           <span style="float: right; margin-top: 3px;">
             <a-button type="primary" @click="search">查询</a-button>
@@ -34,7 +23,7 @@
     </div>
     <div>
       <div class="operator">
-<!--        <a-button type="primary" ghost @click="add">新增</a-button>-->
+        <a-button type="primary" ghost @click="add">新增</a-button>
         <a-button @click="batchDelete">删除</a-button>
       </div>
       <!-- 表格区域 -->
@@ -70,8 +59,8 @@
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import moduleAdd from './FinancialAdd.vue'
-import moduleEdit from './FinancialEdit.vue'
+import moduleAdd from './FamilyAdd.vue'
+import moduleEdit from './FamilyEdit.vue'
 import {mapState} from 'vuex'
 import moment from 'moment'
 moment.locale('zh-cn')
@@ -145,37 +134,38 @@ export default {
           </a-popover>
         }
       }, {
-        title: '是否认定困难生',
-        dataIndex: 'isHardship',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case '1':
-              return <a-tag color="green">是</a-tag>
-            case '0':
-              return <a-tag color="red">否</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
-        title: '家庭年收入',
+        title: '家属姓名',
         ellipsis: true,
-        dataIndex: 'familyIncome'
+        dataIndex: 'name'
       }, {
-        title: '家庭人口数',
+        title: '与本人关系',
         ellipsis: true,
-        dataIndex: 'familyMembers'
+        dataIndex: 'relation'
       }, {
-        title: '家庭情况',
-        ellipsis: true,
-        dataIndex: 'remark'
-      }, {
-        title: '更新时间',
-        dataIndex: 'lastUpdateTime',
+        title: '出生日期',
+        dataIndex: 'birthday',
         ellipsis: true,
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '年龄',
+        dataIndex: 'birthday',
+        ellipsis: true,
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            const birthDate = new Date(text)
+            const today = new Date()
+            let age = today.getFullYear() - birthDate.getFullYear()
+            const monthDiff = today.getMonth() - birthDate.getMonth()
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+              age--
+            }
+            return `${age} 岁`
           } else {
             return '- -'
           }
@@ -212,7 +202,7 @@ export default {
     },
     handlemoduleAddSuccess () {
       this.moduleAdd.visiable = false
-      this.$message.success('新增经济情况成功')
+      this.$message.success('新增家庭成员成功')
       this.search()
     },
     edit (record) {
@@ -224,7 +214,7 @@ export default {
     },
     handlemoduleEditSuccess () {
       this.moduleEdit.visiable = false
-      this.$message.success('修改经济情况成功')
+      this.$message.success('修改家庭成员成功')
       this.search()
     },
     handleDeptChange (value) {
@@ -242,7 +232,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/financial-status-info/' + ids).then(() => {
+          that.$delete('/cos/family-members/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -312,10 +302,11 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      if (params.isHardship === undefined) {
-        delete params.isHardship
+      if (params.status === undefined) {
+        delete params.status
       }
-      this.$get('/cos/financial-status-info/page', {
+      params.userId = this.currentUser.userId
+      this.$get('/cos/family-members/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

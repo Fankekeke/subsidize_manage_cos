@@ -20,6 +20,9 @@
         ai.admin_audit_content,
         ai.admin_audit_sign,
         ai.content,
+        ai.bank_id,
+        ai.file_path,
+        ai.staff_id,
 
         pi.project_name,
         pi.project_type,
@@ -81,6 +84,9 @@
         ai.admin_audit_content,
         ai.admin_audit_sign,
         ai.content,
+        ai.bank_id,
+        ai.file_path,
+        ai.staff_id,
 
         pi.project_name,
         pi.project_type,
@@ -124,25 +130,26 @@
 
     <select id="selectDataByMonth" resultType="java.lang.Integer">
         select count(1)
-        from schedule_class_info
+        from application_info
         where 1 = 1
         <if test="year != null">
-            AND DATE_FORMAT( schedule_class_info.course_date, '%Y' ) = #{year}
+            AND DATE_FORMAT( application_info.application_date, '%Y' ) = #{year}
         </if>
         <if test="month != null">
-            AND DATE_FORMAT( schedule_class_info.course_date, '%m' ) = #{month}
+            AND DATE_FORMAT( application_info.application_date, '%m' ) = #{month}
         </if>
     </select>
 
     <select id="selectAlertByMonth" resultType="java.lang.Integer">
         select count(1)
-        from schedule_elective_info
+        from application_info
         where 1 = 1
+        AND status = '已通过'
         <if test="year != null">
-            AND DATE_FORMAT( schedule_elective_info.course_date, '%Y' ) = #{year}
+            AND DATE_FORMAT( application_info.application_date, '%Y' ) = #{year}
         </if>
         <if test="month != null">
-            AND DATE_FORMAT( schedule_elective_info.course_date, '%m' ) = #{month}
+            AND DATE_FORMAT( application_info.application_date, '%m' ) = #{month}
         </if>
     </select>
 
@@ -172,8 +179,8 @@
         DATE_SUB( curdate(), INTERVAL + 8 DAY ) UNION
         SELECT
         DATE_SUB( curdate(), INTERVAL + 9 DAY )) spo
-        LEFT JOIN schedule_class_info oi ON (
-        DATE_FORMAT( oi.course_date, '%Y-%m-%d' ) = DATE_FORMAT( spo.days, '%Y-%m-%d' )
+        LEFT JOIN application_info oi ON (
+        DATE_FORMAT( oi.application_date, '%Y-%m-%d' ) = DATE_FORMAT( spo.days, '%Y-%m-%d' )
         )
         GROUP BY
         days
@@ -207,8 +214,9 @@
         DATE_SUB( curdate(), INTERVAL + 8 DAY ) UNION
         SELECT
         DATE_SUB( curdate(), INTERVAL + 9 DAY )) spo
-        LEFT JOIN schedule_elective_info oi ON (
-        DATE_FORMAT( oi.course_date, '%Y-%m-%d' ) = DATE_FORMAT( spo.days, '%Y-%m-%d' )
+        LEFT JOIN application_info oi ON (
+        DATE_FORMAT( oi.application_date, '%Y-%m-%d' ) = DATE_FORMAT( spo.days, '%Y-%m-%d' )
+        AND oi.status = '已通过'
         )
         GROUP BY
         days

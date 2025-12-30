@@ -34,8 +34,8 @@
     </div>
     <div>
       <div class="operator">
-        <a-button type="primary" ghost @click="add">新增</a-button>
-<!--        <a-button @click="batchDelete">删除</a-button>-->
+        <a-button type="primary" ghost @click="add" v-if="dataSource.length === 0">新增</a-button>
+        <a-button @click="batchDelete">删除</a-button>
       </div>
       <!-- 表格区域 -->
       <a-table ref="TableInfo"
@@ -149,9 +149,9 @@ export default {
         dataIndex: 'isHardship',
         customRender: (text, row, index) => {
           switch (text) {
-            case 1:
+            case '1':
               return <a-tag color="green">是</a-tag>
-            case 0:
+            case '0':
               return <a-tag color="red">否</a-tag>
             default:
               return '- -'

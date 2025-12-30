@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -54,6 +55,9 @@ public class FamilyMembers implements Serializable {
      * 月收入
      */
     private BigDecimal income;
+
+    @TableField(exist = false)
+    private String studentName;
 
 
 }

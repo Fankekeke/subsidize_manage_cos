@@ -15,10 +15,10 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="贫困学生"
+                label="参保情况"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.isHardship" allowClear>
+                <a-select v-model="queryParams.enrollmentStatus" allowClear>
                   <a-select-option value="0">否</a-select-option>
                   <a-select-option value="1">是</a-select-option>
                 </a-select>
@@ -70,8 +70,8 @@
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import moduleAdd from './FinancialAdd.vue'
-import moduleEdit from './FinancialEdit.vue'
+import moduleAdd from './InsuranceAdd.vue'
+import moduleEdit from './InsuranceEdit.vue'
 import {mapState} from 'vuex'
 import moment from 'moment'
 moment.locale('zh-cn')
@@ -145,8 +145,8 @@ export default {
           </a-popover>
         }
       }, {
-        title: '是否认定困难生',
-        dataIndex: 'isHardship',
+        title: '参保情况',
+        dataIndex: 'enrollmentStatus',
         customRender: (text, row, index) => {
           switch (text) {
             case '1':
@@ -158,20 +158,16 @@ export default {
           }
         }
       }, {
-        title: '家庭年收入',
+        title: '医疗费用总额',
         ellipsis: true,
-        dataIndex: 'familyIncome'
+        dataIndex: 'totalMedicalExpenses'
       }, {
-        title: '家庭人口数',
+        title: '实际报销金额',
         ellipsis: true,
-        dataIndex: 'familyMembers'
-      }, {
-        title: '家庭情况',
-        ellipsis: true,
-        dataIndex: 'remark'
+        dataIndex: 'actualAmount'
       }, {
         title: '更新时间',
-        dataIndex: 'lastUpdateTime',
+        dataIndex: 'updateDate',
         ellipsis: true,
         customRender: (text, row, index) => {
           if (text !== null) {
@@ -212,7 +208,7 @@ export default {
     },
     handlemoduleAddSuccess () {
       this.moduleAdd.visiable = false
-      this.$message.success('新增经济情况成功')
+      this.$message.success('新增参保情况成功')
       this.search()
     },
     edit (record) {
@@ -224,7 +220,7 @@ export default {
     },
     handlemoduleEditSuccess () {
       this.moduleEdit.visiable = false
-      this.$message.success('修改经济情况成功')
+      this.$message.success('修改参保情况成功')
       this.search()
     },
     handleDeptChange (value) {
@@ -242,7 +238,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/financial-status-info/' + ids).then(() => {
+          that.$delete('/cos/insurance-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -312,10 +308,10 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      if (params.isHardship === undefined) {
-        delete params.isHardship
+      if (params.enrollmentStatus === undefined) {
+        delete params.enrollmentStatus
       }
-      this.$get('/cos/financial-status-info/page', {
+      this.$get('/cos/insurance-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

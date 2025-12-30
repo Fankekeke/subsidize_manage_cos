@@ -6,12 +6,14 @@ import cc.mrbird.febs.cos.entity.InsuranceInfo;
 import cc.mrbird.febs.cos.entity.StudentInfo;
 import cc.mrbird.febs.cos.service.IInsuranceInfoService;
 import cc.mrbird.febs.cos.service.IStudentInfoService;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -73,6 +75,7 @@ public class InsuranceInfoController {
         if (studentInfo != null) {
             insuranceInfo.setUserId(studentInfo.getId());
         }
+        insuranceInfo.setUpdateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(insuranceInfoService.save(insuranceInfo));
     }
 
@@ -84,6 +87,7 @@ public class InsuranceInfoController {
      */
     @PutMapping
     public R edit(InsuranceInfo insuranceInfo) {
+        insuranceInfo.setUpdateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(insuranceInfoService.updateById(insuranceInfo));
     }
 
