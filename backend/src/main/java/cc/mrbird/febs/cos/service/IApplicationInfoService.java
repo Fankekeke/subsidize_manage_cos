@@ -38,4 +38,11 @@ public interface IApplicationInfoService extends IService<ApplicationInfo> {
      * @return 结果
      */
     Boolean adminAudit(ApplicationInfo applicationInfo);
+
+    /**
+     * 获取首页数据
+     *
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> homeData();
 }

@@ -2,15 +2,15 @@ package cc.mrbird.febs.cos.service.impl;
 
 import cc.mrbird.febs.cos.dao.ApplicationInfoMapper;
 import cc.mrbird.febs.cos.entity.ApplicationInfo;
+import cc.mrbird.febs.cos.entity.BulletinInfo;
 import cc.mrbird.febs.cos.entity.FundDisbursement;
 import cc.mrbird.febs.cos.entity.ProjectInfo;
 import cc.mrbird.febs.cos.entity.ReviewRecordInfo;
-import cc.mrbird.febs.cos.service.IApplicationInfoService;
-import cc.mrbird.febs.cos.service.IFundDisbursementService;
-import cc.mrbird.febs.cos.service.IReviewRecordInfoService;
+import cc.mrbird.febs.cos.service.*;
 import cc.mrbird.febs.cos.service.IProjectInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +34,12 @@ public class ApplicationInfoServiceImpl extends ServiceImpl<ApplicationInfoMappe
     private final IFundDisbursementService fundDisbursementService;
 
     private final IProjectInfoService projectInfoService;
+
+    private final IStaffInfoService staffInfoService;
+
+    private final IStudentInfoService studentInfoService;
+
+    private final IBulletinInfoService bulletinInfoService;
 
     /**
      * 分页获取资助申请记录信息
@@ -96,5 +102,50 @@ public class ApplicationInfoServiceImpl extends ServiceImpl<ApplicationInfoMappe
             fundDisbursementService.save(fundDisbursement);
         }
         return updateById(applicationInfo);
+    }
+
+    /**
+     * 获取首页数据
+     *
+     * @return 结果
+     */
+    @Override
+    public LinkedHashMap<String, Object> homeData() {
+
+        // 返回数据
+        LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>() {
+            {
+                put("staffNum", 0);
+                put("studentNum", 0);
+                put("majorNum", 0);
+                put("classNum", 0);
+            }
+        };
+
+        result.put("staffNum", staffInfoService.count());
+        result.put("studentNum", studentInfoService.count());
+        result.put("majorNum", projectInfoService.count());
+        result.put("classNum", this.count());
+
+        int year = DateUtil.thisYear();
+        int month = DateUtil.thisMonth() + 1;
+        // 本月申请数量
+        result.put("monthNum", baseMapper.selectDataByMonth(year, month));
+        // 本月审核通过数量
+        result.put("monthAlertNum", baseMapper.selectAlertByMonth(year, month));
+
+        // 本年申请数量
+        result.put("yearNum", baseMapper.selectDataByMonth(year, null));
+        // 本年审核通过数量
+        result.put("yearAlertNum", baseMapper.selectAlertByMonth(year, null));
+
+        // 近十天申请统计
+        result.put("numDayList", baseMapper.selectDataNumWithinDays(null));
+        // 近十天审核通过统计
+        result.put("alertDayList", baseMapper.selectAlertNumWithinDays(null));
+        // 公告信息
+        result.put("bulletin", bulletinInfoService.list(Wrappers.<BulletinInfo>lambdaQuery().eq(BulletinInfo::getRackUp, 1)));
+
+        return result;
     }
 }

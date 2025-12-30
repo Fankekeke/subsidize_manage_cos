@@ -1,12 +1,7 @@
 package cc.mrbird.febs.cos.service.impl;
 
-import cc.mrbird.febs.cos.dao.CertificateFileInfoMapper;
-import cc.mrbird.febs.cos.dao.FinancialStatusInfoMapper;
-import cc.mrbird.febs.cos.entity.BulletinInfo;
-import cc.mrbird.febs.cos.entity.CertificateFileInfo;
-import cc.mrbird.febs.cos.entity.FinancialStatusInfo;
-import cc.mrbird.febs.cos.entity.StudentInfo;
-import cc.mrbird.febs.cos.dao.StudentInfoMapper;
+import cc.mrbird.febs.cos.dao.*;
+import cc.mrbird.febs.cos.entity.*;
 import cc.mrbird.febs.cos.service.IBulletinInfoService;
 import cc.mrbird.febs.cos.service.IStudentInfoService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -36,6 +31,10 @@ public class StudentInfoServiceImpl extends ServiceImpl<StudentInfoMapper, Stude
 
     private final FinancialStatusInfoMapper financialStatusInfoMapper;
 
+    private final InsuranceInfoMapper insuranceInfoMapper;
+
+    private final FamilyMembersMapper familyMembersMapper;
+
     /**
      * 分页获取学生信息
      *
@@ -64,6 +63,12 @@ public class StudentInfoServiceImpl extends ServiceImpl<StudentInfoMapper, Stude
         List<CertificateFileInfo> certificateFileInfoList = certificateFileInfoMapper.selectList(Wrappers.<CertificateFileInfo>lambdaQuery().eq(CertificateFileInfo::getUserId, userId));
         // 家庭情况
         List<FinancialStatusInfo> financialStatusInfoList = financialStatusInfoMapper.selectList(Wrappers.<FinancialStatusInfo>lambdaQuery().eq(FinancialStatusInfo::getUserId, userId));
+        // 保险情况
+        InsuranceInfo insuranceInfo = insuranceInfoMapper.selectOne(Wrappers.<InsuranceInfo>lambdaQuery().eq(InsuranceInfo::getUserId, userId));
+        // 家庭成员
+        List<FamilyMembers> familyMembersList = familyMembersMapper.selectList(Wrappers.<FamilyMembers>lambdaQuery().eq(FamilyMembers::getUserId, userId));
+        result.put("family", familyMembersList);
+        result.put("insurance", insuranceInfo);
         result.put("financial", financialStatusInfoList);
         result.put("certificate", certificateFileInfoList);
         result.put("user", userInfo);

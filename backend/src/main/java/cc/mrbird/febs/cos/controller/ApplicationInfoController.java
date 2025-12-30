@@ -43,6 +43,16 @@ public class ApplicationInfoController {
     }
 
     /**
+     * 获取首页数据
+     *
+     * @return 结果
+     */
+    @GetMapping("/homeData")
+    public R homeData() {
+        return R.ok(applicationInfoService.homeData());
+    }
+
+    /**
      * 查询资助申请记录信息详情
      *
      * @param id 主键ID

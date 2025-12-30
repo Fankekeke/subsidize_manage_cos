@@ -32,4 +32,12 @@ public interface ApplicationInfoMapper extends BaseMapper<ApplicationInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> queryApplicationByIds(@Param("ids") List<Integer> ids);
+
+    Integer selectDataByMonth(@Param("year") Integer year, @Param("month") Integer month);
+
+    Integer selectAlertByMonth(@Param("year") Integer year, @Param("month") Integer month);
+
+    List<LinkedHashMap<String, Object>> selectDataNumWithinDays();
+
+    List<LinkedHashMap<String, Object>> selectAlertNumWithinDays();
 }
